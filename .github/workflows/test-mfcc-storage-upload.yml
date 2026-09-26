@@ -1,0 +1,27 @@
+name: Test MFCC Storage Upload
+
+on:
+  push:
+    paths:
+      - '.github/workflows/test-mfcc-storage-upload.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install --no-save tus-js-client@4
+      - name: Create tiny test file
+        run: printf 'MediaForge storage test\n' > /tmp/mfcc-storage-test.txt
+      - name: Upload tiny signed file
+        env:
+          MFCC_PRODUCTION_ID: d41a3f39-6192-47ae-a25c-a56ef73cd970
+          MFCC_OUTPUT_KIND: script
+          MFCC_OUTPUT_FILE: /tmp/mfcc-storage-test.txt
+        run: node tools/mfcc_upload_output.mjs
