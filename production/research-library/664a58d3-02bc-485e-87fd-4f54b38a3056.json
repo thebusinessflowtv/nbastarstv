@@ -1,0 +1,114 @@
+{
+  "thesis": "Nikola Jokic became the ninth player in NBA history to win three MVP awards in four seasons (2020-21, 2021-22, 2023-24), joining an elite legacy while achieving unprecedented statistical dominance as a center.",
+  "facts": [
+    {
+      "claim": "Jokic won three MVP awards in four seasons: 2020-21, 2021-22, and 2023-24, finishing runner-up to Joel Embiid in 2022-23.",
+      "source_url": "https://www.nbcnews.com/news/amp/rcna151385",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Only eight other players in NBA history have won three or more MVP awards: Kareem Abdul-Jabbar, Michael Jordan, Bill Russell, LeBron James, Wilt Chamberlain, Larry Bird, Magic Johnson, and Moses Malone.",
+      "source_url": "https://www.espn.com/nba/story/_/id/40109006/nuggets-nikola-jokic-wins-nba-mvp-3rd-4-seasons",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Jokic became the first center in six decades to win three MVPs in four seasons, following Kareem Abdul-Jabbar who achieved this from 1973-74 to 1976-77.",
+      "source_url": "https://www.espn.com/nba/story/_/id/40109006/nuggets-nikola-jokic-wins-nba-mvp-3rd-4-seasons",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "In 2023-24, Jokic finished top five in total points, rebounds, and assists, becoming the first player since Wilt Chamberlain in the 1960s to accomplish this.",
+      "source_url": "https://www.sportico.com/leagues/basketball/2024/nikola-jokic-mvp-nba-2024-1234778306/",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Jokic is the only player in NBA history to rank top ten in points, rebounds, assists, and steals simultaneously since 1973-74 when the league began tracking steals.",
+      "source_url": "https://www.nbcnews.com/news/amp/rcna151385",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Jokic led the league in Box Plus/Minus for 2023-24 and has led in Player Efficiency Rating for four consecutive seasons, becoming the all-time PER leader ahead of Michael Jordan and LeBron James.",
+      "source_url": "https://sports.yahoo.com/nuggets-star-nikola-jokic-wins-third-nba-mvp-in-four-seasons-placing-him-alongside-all-time-greats-233405189.html",
+      "safe_for_packaging": true
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "26.4 points, 12.4 rebounds, 9.0 assists per game",
+      "context": "Jokic's 2023-24 season averages",
+      "source_url": "https://www.espn.com/nba/story/_/id/40109006/nuggets-nikola-jokic-wins-nba-mvp-3rd-4-seasons"
+    },
+    {
+      "value": "79 of 99 first-place votes",
+      "context": "Jokic's dominant 2023-24 MVP voting margin",
+      "source_url": "https://sports.yahoo.com/nuggets-star-nikola-jokic-wins-third-nba-mvp-in-four-seasons-placing-him-alongside-all-time-greats-233405189.html"
+    },
+    {
+      "value": "23.7 point differential per 100 possessions",
+      "context": "Denver's net rating with vs. without Jokic (largest for any player with 1,000+ minutes in 2023-24)",
+      "source_url": "https://www.sportico.com/leagues/basketball/2024/nikola-jokic-mvp-nba-2024-1234778306/"
+    },
+    {
+      "value": "58.3% field goal shooting",
+      "context": "Jokic's 2023-24 season shooting percentage",
+      "source_url": "https://www.nbcnews.com/news/amp/rcna151385"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2020-21",
+      "event": "Jokic wins his first NBA MVP award, becoming a breakout star on the Denver Nuggets.",
+      "source_url": "https://www.nba.com/news/kia-nba-most-valuable-player-award-winners-denver-nuggets"
+    },
+    {
+      "date": "2021-22",
+      "event": "Jokic wins his second consecutive MVP award and leads Denver to NBA championship.",
+      "source_url": "https://sports.yahoo.com/nuggets-star-nikola-jokic-wins-third-nba-mvp-in-four-seasons-placing-him-alongside-all-time-greats-233405189.html"
+    },
+    {
+      "date": "2022-23",
+      "event": "Joel Embiid wins MVP; Jokic finishes runner-up but Denver wins championship tournament games.",
+      "source_url": "https://www.nbcnews.com/news/amp/rcna151385"
+    },
+    {
+      "date": "2023-24",
+      "event": "Jokic wins third MVP in four seasons, becoming ninth player in NBA history with three or more MVPs.",
+      "source_url": "https://www.espn.com/nba/story/_/id/40109006/nuggets-nikola-jokic-wins-nba-mvp-3rd-4-seasons"
+    }
+  ],
+  "sources": [
+    {
+      "title": "nbcnews.com",
+      "url": "https://www.nbcnews.com/news/amp/rcna151385",
+      "source_type": "web"
+    },
+    {
+      "title": "espn.com",
+      "url": "https://www.espn.com/nba/story/_/id/40109006/nuggets-nikola-jokic-wins-nba-mvp-3rd-4-seasons",
+      "source_type": "web"
+    },
+    {
+      "title": "sportico.com",
+      "url": "https://www.sportico.com/leagues/basketball/2024/nikola-jokic-mvp-nba-2024-1234778306/",
+      "source_type": "web"
+    },
+    {
+      "title": "sports.yahoo.com",
+      "url": "https://sports.yahoo.com/nuggets-star-nikola-jokic-wins-third-nba-mvp-in-four-seasons-placing-him-alongside-all-time-greats-233405189.html",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "664a58d3-02bc-485e-87fd-4f54b38a3056",
+  "topic": "Nikola Jokic's unprecedented three-time MVP achievement and historical dominance",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 14236,
+    "output_tokens": 1593,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.032201,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-26T09:38:06.846150+00:00"
+}
