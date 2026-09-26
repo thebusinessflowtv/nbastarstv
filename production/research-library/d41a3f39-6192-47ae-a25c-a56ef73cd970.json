@@ -1,0 +1,87 @@
+{
+  "thesis": "Luka Dončić faced significant durability challenges in the 2024-25 season, suffering multiple injuries—including calf, groin, finger and hamstring strains—that limited him to a career-low appearance rate, culminating in a Grade 2 hamstring strain in April.",
+  "facts": [
+    {
+      "claim": "Dončić appeared in 50 games during 2024-25, his lowest total of his NBA career.",
+      "source_url": "https://bleacherreport.com/articles/25361277-luka-doncic-injured-latest-updates-lakers-star-and-timeline-return",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "He missed time with a calf contusion, left finger sprain, and left groin soreness during the 2024-25 season.",
+      "source_url": "https://bleacherreport.com/articles/25361277-luka-doncic-injured-latest-updates-lakers-star-and-timeline-return",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Dončić suffered a Grade 2 hamstring strain on April 2, 2026, against Oklahoma City that forced him out for the remainder of the regular season.",
+      "source_url": "https://sports.yahoo.com/articles/luka-doncic-injury-timeline-lakers-230041578.html",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "During his first six NBA seasons, Dončić suited up in at least 65 games five times before dropping to 50 in 2024-25.",
+      "source_url": "https://bleacherreport.com/articles/25361277-luka-doncic-injured-latest-updates-lakers-star-and-timeline-return",
+      "safe_for_packaging": false
+    },
+    {
+      "claim": "Despite injury issues, Dončić averaged 33.4 points, 7.9 rebounds and 8.7 assists per game heading into late January 2026.",
+      "source_url": "https://bleacherreport.com/articles/25361277-luka-doncic-injured-latest-updates-lakers-star-and-timeline-return",
+      "safe_for_packaging": false
+    },
+    {
+      "claim": "According to injury expert Jeff Stotts, Grade 2 hamstring strains average 35 days of time lost.",
+      "source_url": "https://sports.yahoo.com/articles/long-luka-doncic-latest-hamstring-125712495.html",
+      "safe_for_packaging": false
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "50 games",
+      "context": "Career-low appearances for Dončić in 2024-25 season",
+      "source_url": "https://bleacherreport.com/articles/25361277-luka-doncic-injured-latest-updates-lakers-star-and-timeline-return"
+    },
+    {
+      "value": "33.4 points per game",
+      "context": "Dončić's scoring average heading into late January 2026 despite injuries",
+      "source_url": "https://bleacherreport.com/articles/25361277-luka-doncic-injured-latest-updates-lakers-star-and-timeline-return"
+    },
+    {
+      "value": "35 days",
+      "context": "Average time lost for Grade 2 hamstring strains per injury expert Jeff Stotts",
+      "source_url": "https://sports.yahoo.com/articles/long-luka-doncic-latest-hamstring-125712495.html"
+    },
+    {
+      "value": "64 games",
+      "context": "Dončić's game count when he left the final regular-season game on April 2, one shy of MVP eligibility minimum",
+      "source_url": "https://sports.yahoo.com/articles/luka-doncic-injury-timeline-lakers-230041578.html"
+    }
+  ],
+  "sources": [
+    {
+      "title": "bleacherreport.com",
+      "url": "https://bleacherreport.com/articles/25361277-luka-doncic-injured-latest-updates-lakers-star-and-timeline-return",
+      "source_type": "web"
+    },
+    {
+      "title": "sports.yahoo.com",
+      "url": "https://sports.yahoo.com/articles/luka-doncic-injury-timeline-lakers-230041578.html",
+      "source_type": "web"
+    },
+    {
+      "title": "sports.yahoo.com",
+      "url": "https://sports.yahoo.com/articles/long-luka-doncic-latest-hamstring-125712495.html",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "d41a3f39-6192-47ae-a25c-a56ef73cd970",
+  "topic": "Luka Doncic's injury history and durability concerns in 2024-25 season",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 13780,
+    "output_tokens": 1600,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.03178,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-26T04:31:41.864277+00:00"
+}
