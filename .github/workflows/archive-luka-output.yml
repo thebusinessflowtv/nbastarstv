@@ -14,7 +14,7 @@ permissions:
 jobs:
   archive:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - name: Restore completed Luka production
@@ -65,12 +65,29 @@ jobs:
           path: restored/rendered/script.txt
           if-no-files-found: error
           retention-days: 90
-      - name: Store Luka 4K video for direct streaming
+      - name: Build HLS package from final 4K video
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf restored/rendered/hls
+          mkdir -p restored/rendered/hls
+          ffmpeg -hide_banner -loglevel error -y \
+            -i restored/rendered/final.mp4 \
+            -map 0:v:0 -map 0:a:0? \
+            -c copy \
+            -f hls \
+            -hls_time 10 \
+            -hls_list_size 0 \
+            -hls_segment_type mpegts \
+            -hls_segment_filename 'restored/rendered/hls/seg-%05d.ts' \
+            restored/rendered/hls/index.m3u8
+          test -s restored/rendered/hls/index.m3u8
+          echo "Segments: $(find restored/rendered/hls -name 'seg-*.ts' | wc -l)"
+      - name: Store Luka HLS stream privately
         env:
           MFCC_PRODUCTION_ID: d41a3f39-6192-47ae-a25c-a56ef73cd970
-          MFCC_OUTPUT_KIND: video
-          MFCC_OUTPUT_FILE: restored/rendered/final.mp4
-        run: node tools/mfcc_upload_output.mjs
+          MFCC_HLS_DIR: restored/rendered/hls
+        run: node tools/mfcc_upload_hls.mjs
       - name: Store Luka thumbnail
         env:
           MFCC_PRODUCTION_ID: d41a3f39-6192-47ae-a25c-a56ef73cd970
