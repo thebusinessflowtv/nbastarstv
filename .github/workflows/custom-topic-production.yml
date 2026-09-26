@@ -40,7 +40,7 @@ jobs:
           data = json.loads(topics_path.read_text(encoding='utf-8'))
 
           topic_id = str(request.get('id') or '').strip()
-          topic_name = str(request.get('topic') or '').strip()
+          topic_name = str(request.get('topic') or '').strip().replace("'", "’")
           if not topic_id or not topic_name:
               raise SystemExit('custom-topic-request.json requires id and topic')
 
@@ -48,6 +48,9 @@ jobs:
           item = dict(request)
           item['id'] = topic_id
           item['topic'] = topic_name
+          for key in ('working_angle', 'title_seed'):
+              if isinstance(item.get(key), str):
+                  item[key] = item[key].replace("'", "’")
           item['status'] = 'ready'
           item.setdefault('category', 'NBA storytelling')
           item.setdefault('working_angle', topic_name)
