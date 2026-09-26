@@ -5,8 +5,14 @@ on:
     paths:
       - '.github/workflows/mfcc-smoke.yml'
 
+permissions:
+  contents: write
+  actions: write
+
 jobs:
   smoke:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    env:
+      TEST_MODEL: ${{ vars.ANTHROPIC_RESEARCH_MODEL || 'claude-haiku-4-5-20251001' }}
     steps:
-      - run: echo "NBA Stars Actions OK"
+      - run: echo "NBA Stars Actions OK; model=$TEST_MODEL"
