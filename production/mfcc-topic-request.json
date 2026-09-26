@@ -1,0 +1,11 @@
+{
+  "request_id": "d41a3f39-6192-47ae-a25c-a56ef73cd970",
+  "production_id": "d41a3f39-6192-47ae-a25c-a56ef73cd970",
+  "mode": "suggest",
+  "objective": "viral_ctr",
+  "notes": "Um tema que seja uma notícia/fofoca de um grande jogador de basquete da atualizadade",
+  "upload_requested": false,
+  "channel_name": "NBA Stars",
+  "niche": "NBA / Players / Teams / Rivalries / Curiosities / Stories",
+  "locale": "en-US"
+}
