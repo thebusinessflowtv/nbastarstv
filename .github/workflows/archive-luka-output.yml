@@ -38,11 +38,9 @@ jobs:
           from pathlib import Path
           d=json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
           script=str(d.get('script') or '').strip()
-          if not script:
-              raise SystemExit('Missing script')
+          if not script: raise SystemExit('Missing script')
           Path('restored/rendered/script.txt').write_text(script+'\n',encoding='utf-8')
           PY
-          echo "Recovered validated Luka production files."
       - name: Save 4K video as GitHub artifact
         uses: actions/upload-artifact@v4
         with:
@@ -65,6 +63,10 @@ jobs:
           path: restored/rendered/script.txt
           if-no-files-found: error
           retention-days: 90
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
       - name: Build HLS package from final 4K video
         shell: bash
         run: |
@@ -73,12 +75,8 @@ jobs:
           mkdir -p restored/rendered/hls
           ffmpeg -hide_banner -loglevel error -y \
             -i restored/rendered/final.mp4 \
-            -map 0:v:0 -map 0:a:0? \
-            -c copy \
-            -f hls \
-            -hls_time 10 \
-            -hls_list_size 0 \
-            -hls_segment_type mpegts \
+            -map 0:v:0 -map 0:a:0? -c copy \
+            -f hls -hls_time 10 -hls_list_size 0 -hls_segment_type mpegts \
             -hls_segment_filename 'restored/rendered/hls/seg-%05d.ts' \
             restored/rendered/hls/index.m3u8
           test -s restored/rendered/hls/index.m3u8
