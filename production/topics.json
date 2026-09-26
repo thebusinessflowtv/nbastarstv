@@ -34,14 +34,20 @@
       "title_seed": "Jayson Tatum's shooting slump and offensive role changes with Celtics",
       "thumbnail_text_seed": "NBA STORY",
       "click_score": 100,
-      "click_reason": "Requested from MediaForge Control Center.",
+      "click_reason": "MediaForge Auto Heal retry.",
       "objective": "viral_ctr",
       "upload_requested": false,
       "mfcc_production_id": "29fdcc7f-e751-4c1a-83fb-880ce022466f",
       "mfcc_channel_slug": "nba-stars",
       "mfcc_requested_by": "cfa2b99a-68d0-41db-b5fa-1bda45f0506a",
       "status": "ready",
-      "scored_at": "2026-09-26T04:48:32.709847+00:00"
+      "scored_at": "2026-09-26T09:38:04.210481+00:00",
+      "autoheal": {
+        "attempt": 2,
+        "nonce": "2026-09-26T09:37:53.538Z",
+        "error_class": "unknown",
+        "stage": "unknown"
+      }
     },
     {
       "id": "664a58d3-02bc-485e-87fd-4f54b38a3056",
