@@ -1,4 +1,4 @@
-name: Apply smooth zoom and queue fix
+name: Apply smooth zoom fix
 
 on:
   push:
@@ -18,47 +18,70 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Patch renderer and custom launcher
+      - name: Patch 4K image motion renderer
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
 
-          render=Path('production/render_episode_hq.py')
-          text=render.read_text(encoding='utf-8')
-          old='''def render_image_segment(asset: RenderAsset, seconds: float, out: Path, motion_index: int) -> None:\n    frames = max(2, int(round(seconds * FPS)))\n    denom = max(1, frames - 1)\n    if motion_index % 2 == 0:\n        zoom = f"1.0+0.05*on/{denom}"\n        motion = "zoom_in"\n    else:\n        zoom = f"1.05-0.05*on/{denom}"\n        motion = "zoom_out"\n    # Important: pre-scale slightly above 4K, then keep x/y locked to the exact center.\n    # This removes the visible pixel-rounding jitter caused by zooming a 720p image.\n    vf = (\n        "scale=4608:2592:force_original_aspect_ratio=increase,crop=4608:2592,"\n        f"zoompan=z='{zoom}':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=1:s={OUTPUT_W}x{OUTPUT_H}:fps={FPS},"\n        "format=yuv420p"\n    )\n    run([\n        "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",\n        "-loop", "1", "-framerate", str(FPS), "-i", str(asset.path),\n        "-t", f"{seconds:.3f}", "-vf", vf, "-an", "-c:v", "libx264",\n        "-preset", "veryfast", "-crf", "20", "-r", str(FPS), "-pix_fmt", "yuv420p", str(out),\n    ])\n    out.with_suffix(".motion").write_text(motion, encoding="utf-8")\n'''
-          new='''def render_image_segment(asset: RenderAsset, seconds: float, out: Path, motion_index: int) -> None:\n    # Render the complete Ken Burns move from ONE supersampled source frame.\n    # The old d=1 approach recalculated crop coordinates from sequential input frames and\n    # exposed integer rounding at 4K as visible micro-jitter. 4x supersampling makes one\n    # crop pixel equal to only 0.25 output pixels, while smoothstep eases acceleration.\n    frames = max(2, int(round(seconds * FPS)))\n    denom = max(1, frames - 1)\n    t = f"(on/{denom})"\n    smooth = f"(3*{t}*{t}-2*{t}*{t}*{t})"\n    if motion_index % 2 == 0:\n        zoom = f"1.0+0.04*{smooth}"\n        motion = "zoom_in_smooth"\n    else:\n        zoom = f"1.04-0.04*{smooth}"\n        motion = "zoom_out_smooth"\n\n    super_w = OUTPUT_W * 4\n    super_h = OUTPUT_H * 4\n    vf = (\n        f"scale={super_w}:{super_h}:force_original_aspect_ratio=increase:flags=lanczos,"\n        f"crop={super_w}:{super_h},"\n        f"zoompan=z='{zoom}':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':"\n        f"d={frames}:s={OUTPUT_W}x{OUTPUT_H}:fps={FPS},"\n        "format=yuv420p"\n    )\n    run([\n        "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",\n        "-loop", "1", "-i", str(asset.path),\n        "-vf", vf, "-frames:v", str(frames), "-an", "-c:v", "libx264",\n        "-preset", "veryfast", "-crf", "20", "-r", str(FPS), "-pix_fmt", "yuv420p", str(out),\n    ])\n    out.with_suffix(".motion").write_text(motion, encoding="utf-8")\n'''
-          if old not in text:
-              if 'zoom_in_smooth' not in text:
-                  raise SystemExit('Expected render_image_segment block was not found')
-          else:
-              render.write_text(text.replace(old,new,1),encoding='utf-8')
+          path=Path('production/render_episode_hq.py')
+          text=path.read_text(encoding='utf-8')
+          start=text.index('def render_image_segment(')
+          end=text.index('\ndef safe_video_seconds(', start)
+          new='''def render_image_segment(asset: RenderAsset, seconds: float, out: Path, motion_index: int) -> None:
+    # Render a complete Ken Burns move from one supersampled source frame.
+    # A single source frame + 4x supersampling prevents integer crop rounding from
+    # becoming visible micro-jitter in the final 3840x2160 image.
+    frames = max(2, int(round(seconds * FPS)))
+    denom = max(1, frames - 1)
+    t = f"(on/{denom})"
+    smooth = f"(3*{t}*{t}-2*{t}*{t}*{t})"
+    if motion_index % 2 == 0:
+        zoom = f"1.0+0.04*{smooth}"
+        motion = "zoom_in_smooth"
+    else:
+        zoom = f"1.04-0.04*{smooth}"
+        motion = "zoom_out_smooth"
 
-          launcher=Path('.github/workflows/custom-topic-production.yml')
-          s=launcher.read_text(encoding='utf-8')
-          old_launch='''      - name: Launch daily production for custom topic\n        env:\n          GH_TOKEN: ${{ github.token }}\n        shell: bash\n        run: |\n          set -euo pipefail\n          gh workflow run daily-production.yml \\\n            --repo "${{ github.repository }}" \\\n            --ref main \\\n            -f topic_id="${{ steps.topic.outputs.topic_id }}" \\\n            -f upload_and_schedule=false\n          echo "Dispatched daily-production.yml for ${{ steps.topic.outputs.topic_id }}"\n'''
-          new_launch='''      - name: Ask sequential queue to start next topic\n        env:\n          GH_TOKEN: ${{ github.token }}\n        shell: bash\n        run: |\n          set -euo pipefail\n          gh workflow run video-queue-orchestrator.yml \\\n            --repo "${{ github.repository }}" \\\n            --ref main\n          echo "Queued ${{ steps.topic.outputs.topic_id }} for serialized production."\n'''
-          if old_launch not in s:
-              if 'video-queue-orchestrator.yml' not in s:
-                  raise SystemExit('Expected custom launcher block was not found')
+    super_w = OUTPUT_W * 4
+    super_h = OUTPUT_H * 4
+    vf = (
+        f"scale={super_w}:{super_h}:force_original_aspect_ratio=increase:flags=lanczos,"
+        f"crop={super_w}:{super_h},"
+        f"zoompan=z='{zoom}':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':"
+        f"d={frames}:s={OUTPUT_W}x{OUTPUT_H}:fps={FPS},"
+        "format=yuv420p"
+    )
+    run([
+        "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+        "-loop", "1", "-i", str(asset.path),
+        "-vf", vf, "-frames:v", str(frames), "-an", "-c:v", "libx264",
+        "-preset", "veryfast", "-crf", "20", "-r", str(FPS), "-pix_fmt", "yuv420p", str(out),
+    ])
+    out.with_suffix(".motion").write_text(motion, encoding="utf-8")
+
+'''
+          current=text[start:end]
+          if 'zoom_in_smooth' in current and 'd={frames}' in current:
+              print('Smooth zoom renderer already installed.')
           else:
-              launcher.write_text(s.replace(old_launch,new_launch,1),encoding='utf-8')
+              path.write_text(text[:start]+new+text[end+1:],encoding='utf-8')
+              print('Smooth zoom renderer installed.')
           PY
-
           python -m py_compile production/render_episode_hq.py production/render_episode.py
 
-      - name: Commit engine fix
+      - name: Commit renderer fix
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'NBA Stars Factory'
           git config user.email 'thebusinessflowtv@gmail.com'
-          git add production/render_episode_hq.py .github/workflows/custom-topic-production.yml
+          git add production/render_episode_hq.py
           if git diff --cached --quiet; then
-            echo 'Engine/queue fixes already applied.'
+            echo 'Renderer already patched.'
             exit 0
           fi
-          git commit -m 'fix(factory): smooth 4K image zoom and serialize topic launches'
+          git commit -m 'fix(render): eliminate 4K still-image zoom jitter'
           git pull --rebase --autostash origin main
           git push origin HEAD:main
