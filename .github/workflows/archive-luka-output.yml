@@ -65,8 +65,6 @@ jobs:
           path: restored/rendered/script.txt
           if-no-files-found: error
           retention-days: 90
-      - name: Install resumable uploader
-        run: npm install --no-save tus-js-client@4
       - name: Store Luka 4K video for direct streaming
         env:
           MFCC_PRODUCTION_ID: d41a3f39-6192-47ae-a25c-a56ef73cd970
