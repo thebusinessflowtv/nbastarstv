@@ -1,6 +1,7 @@
 {
   "topic_id": "29fdcc7f-e751-4c1a-83fb-880ce022466f",
-  "reason": "manual_recovery_after_concurrency_fix",
-  "requested_at": "2026-09-26T20:56:00Z",
-  "zoom_engine": "smooth_supersampled_v1"
+  "reason": "retry_after_resilient_tts_and_summary_fix",
+  "requested_at": "2026-09-26T21:10:00Z",
+  "zoom_engine": "smooth_supersampled_v1",
+  "tts_engine": "chunked_retry_fallback_v1"
 }
