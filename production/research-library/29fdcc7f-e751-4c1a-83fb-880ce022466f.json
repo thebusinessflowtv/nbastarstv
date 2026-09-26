@@ -1,0 +1,87 @@
+{
+  "thesis": "Jayson Tatum struggled with shooting efficiency after returning from torn Achilles surgery mid-season 2025-26, adjusting to a reduced offensive role as secondary option behind Jaylen Brown while the Celtics contended for the East title.",
+  "facts": [
+    {
+      "claim": "Tatum suffered a torn Achilles in the 2025 NBA playoffs and accelerated his return to take a secondary role behind Jaylen Brown.",
+      "source_url": "https://athlonsports.com/nba/boston-celtics/jayson-tatum-had-words-on-his-shooting-slump-since-making-celtics-return-after-298-day-absence",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "After returning, Tatum described his shooting slump as unprecedented, stating he had never experienced something like it before.",
+      "source_url": "https://athlonsports.com/nba/boston-celtics/jayson-tatum-had-words-on-his-shooting-slump-since-making-celtics-return-after-298-day-absence",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Tatum appeared uncomfortable on court readjusting to an offense where he functions as a role-player while testing his newly-healed Achilles.",
+      "source_url": "https://athlonsports.com/nba/boston-celtics/jayson-tatum-had-words-on-his-shooting-slump-since-making-celtics-return-after-298-day-absence",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "In 2026 playoffs, Tatum shot 40.6% from the floor, ranking fifth among Boston's rotation players, and 25% from three-point range.",
+      "source_url": "https://www.nbcsportsboston.com/nba/boston-celtics/jayson-tatum-shooting-slump-celtics/611337/",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Coach Brad Stevens and analysts suggested moving Tatum away from isolation and pick-and-roll handling to more off-ball forward role.",
+      "source_url": "https://hardwoodhoudini.com/obvious-jayson-tatum-tweak-would-kickstart-celtics-playoff-offense",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "The Celtics maintained a 126.4 offensive rating with Tatum on court in 2026 playoffs versus 101.7 when he sat, despite his reduced scoring.",
+      "source_url": "https://www.nbcsportsboston.com/nba/boston-celtics/jayson-tatum-shooting-slump-celtics/611337/",
+      "safe_for_packaging": true
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "298 days",
+      "context": "Length of Tatum's absence before returning from torn Achilles injury",
+      "source_url": "https://athlonsports.com/nba/boston-celtics/jayson-tatum-had-words-on-his-shooting-slump-since-making-celtics-return-after-298-day-absence"
+    },
+    {
+      "value": "47-24 record",
+      "context": "Celtics' record holding the No. 2 seed in Eastern Conference at time of Tatum's return in March 2026",
+      "source_url": "https://athlonsports.com/nba/boston-celtics/jayson-tatum-had-words-on-his-shooting-slump-since-making-celtics-return-after-298-day-absence"
+    },
+    {
+      "value": "25%",
+      "context": "Tatum's three-point shooting percentage in 2026 playoffs, dead-last among Celtics rotation players",
+      "source_url": "https://www.nbcsportsboston.com/nba/boston-celtics/jayson-tatum-shooting-slump-celtics/611337/"
+    },
+    {
+      "value": "126.4 offensive rating",
+      "context": "Celtics' playoff offensive rating with Tatum on the floor in 2026",
+      "source_url": "https://www.nbcsportsboston.com/nba/boston-celtics/jayson-tatum-shooting-slump-celtics/611337/"
+    }
+  ],
+  "sources": [
+    {
+      "title": "athlonsports.com",
+      "url": "https://athlonsports.com/nba/boston-celtics/jayson-tatum-had-words-on-his-shooting-slump-since-making-celtics-return-after-298-day-absence",
+      "source_type": "web"
+    },
+    {
+      "title": "nbcsportsboston.com",
+      "url": "https://www.nbcsportsboston.com/nba/boston-celtics/jayson-tatum-shooting-slump-celtics/611337/",
+      "source_type": "web"
+    },
+    {
+      "title": "hardwoodhoudini.com",
+      "url": "https://hardwoodhoudini.com/obvious-jayson-tatum-tweak-would-kickstart-celtics-playoff-offense",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "29fdcc7f-e751-4c1a-83fb-880ce022466f",
+  "topic": "Jayson Tatum's shooting slump and offensive role changes with Celtics",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 13478,
+    "output_tokens": 1596,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.031458,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-26T20:56:47.322604+00:00"
+}
