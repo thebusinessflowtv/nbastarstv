@@ -1,4 +1,4 @@
-from render_episode_hq import main
+from render_episode_smooth import main
 
 
 if __name__ == "__main__":
