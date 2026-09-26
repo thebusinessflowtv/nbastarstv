@@ -1,0 +1,65 @@
+name: NBA Stars Sequential Production Queue
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_run:
+    workflows: ['NBA Stars Daily Production']
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: nba-stars-production-queue-orchestrator
+  cancel-in-progress: false
+
+jobs:
+  dispatch-next:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Start at most one production
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ACTIVE="$(gh run list --repo "${GITHUB_REPOSITORY}" --workflow daily-production.yml --limit 50 --json status --jq '[.[] | select(.status == "queued" or .status == "in_progress" or .status == "waiting" or .status == "pending" or .status == "requested")] | length')"
+          if [ "$ACTIVE" -gt 0 ]; then
+            echo "A Daily Production is already active/pending. Queue remains serialized."
+            exit 0
+          fi
+
+          TOPIC_ID="$(python - <<'PY'
+          import json
+          from pathlib import Path
+
+          doc=json.loads(Path('production/topics.json').read_text(encoding='utf-8'))
+          topics=doc.get('topics') or []
+          ready=[t for t in topics if str(t.get('status') or '') == 'ready' and str(t.get('id') or '').strip()]
+          # topics.json keeps newly requested custom topics near the top; dispatch one only.
+          print(str(ready[0].get('id') or '').strip() if ready else '')
+          PY
+          )"
+
+          if [ -z "$TOPIC_ID" ]; then
+            echo "No ready NBA Stars topic is waiting."
+            exit 0
+          fi
+
+          gh workflow run daily-production.yml \
+            --repo "${GITHUB_REPOSITORY}" \
+            --ref main \
+            -f topic_id="$TOPIC_ID" \
+            -f upload_and_schedule=false
+
+          echo "Dispatched exactly one NBA Stars production: $TOPIC_ID"
