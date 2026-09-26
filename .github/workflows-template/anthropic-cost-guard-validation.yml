@@ -1,0 +1,117 @@
+name: Anthropic Cost Guard Validation
+
+on:
+  push:
+    paths:
+      - 'production/anthropic_budget.py'
+      - 'production/research_episode.py'
+      - 'production/generate_episode.py'
+      - 'production/recover_paid_episode.py'
+      - 'production/render_episode.py'
+      - 'production/topic_reservoir_v4.py'
+      - 'production/research-library/**'
+      - '.github/workflows/daily-production.yml'
+      - '.github/workflows/daily-content-pack.yml'
+      - '.github/workflows/topic-reservoir-v3.yml'
+      - '.github/workflows/anthropic-cost-guard-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-without-paid-api:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install free validation dependencies
+        run: pip install pyyaml anthropic
+
+      - name: Compile Python without calling Anthropic
+        run: |
+          python -m py_compile \
+            production/anthropic_budget.py \
+            production/research_episode.py \
+            production/generate_episode.py \
+            production/recover_paid_episode.py \
+            production/render_episode.py \
+            production/topic_reservoir_v4.py
+
+      - name: Parse workflow YAML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+          paths = [
+              '.github/workflows/daily-production.yml',
+              '.github/workflows/daily-content-pack.yml',
+              '.github/workflows/topic-reservoir-v3.yml',
+              '.github/workflows/anthropic-cost-guard-validation.yml',
+          ]
+          for path in paths:
+              data = yaml.safe_load(Path(path).read_text(encoding='utf-8'))
+              if not isinstance(data, dict) or 'jobs' not in data:
+                  raise SystemExit(f'Invalid workflow structure: {path}')
+              print('YAML OK:', path)
+          PY
+
+      - name: Assert spend protections statically
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          research = Path('production/research_episode.py').read_text(encoding='utf-8')
+          writer = Path('production/generate_episode.py').read_text(encoding='utf-8')
+          renderer = Path('production/render_episode.py').read_text(encoding='utf-8')
+          reservoir = Path('production/topic_reservoir_v4.py').read_text(encoding='utf-8')
+          reservoir_wf = Path('.github/workflows/topic-reservoir-v3.yml').read_text(encoding='utf-8')
+          daily = Path('.github/workflows/daily-production.yml').read_text(encoding='utf-8')
+
+          checks = {
+              'Haiku research model': 'claude-haiku-4-5-20251001' in research,
+              'one web search maximum': '"max_uses": 1' in research,
+              'research disables SDK retries': 'max_retries=0' in research,
+              'Sonnet has no web search': 'web_search_' not in writer,
+              'Sonnet disables thinking': 'thinking={"type": "disabled"}' in writer,
+              'Sonnet disables SDK retries': 'max_retries=0' in writer,
+              'hard total budget': 'ANTHROPIC_TOTAL_BUDGET_USD' in writer,
+              'renderer thumbnail fallback': 'load_thumbnail_base' in renderer and 'Image.new("RGB", (1280, 720)' in renderer,
+              'weekly optimizer uses Haiku': 'claude-haiku-4-5-20251001' in reservoir and 'claude-haiku-4-5-20251001' in reservoir_wf,
+              'weekly optimizer disables retries': 'max_retries=0' in reservoir,
+              'weekly optimizer output cap': 'max_tokens=4500' in reservoir,
+              'daily restores research cache': 'actions/cache/restore@v4' in daily and 'tbf-haiku-research' in daily,
+              'daily hydrates durable research': 'Hydrate durable research checkpoint' in daily,
+              'daily saves paid state on failure': 'actions/cache/save@v4' in daily and 'Recovery artifact on any failure' in daily,
+          }
+          failed = [name for name, ok in checks.items() if not ok]
+          for name, ok in checks.items():
+              print(('PASS' if ok else 'FAIL'), name)
+          if failed:
+              raise SystemExit('Cost guard validation failed: ' + ', '.join(failed))
+          PY
+
+      - name: Amazon Sonnet preflight without paid API
+        run: |
+          python - <<'PY'
+          import json
+          from production.generate_episode import build_prompt, EPISODE_TOOL
+          topic=next(t for t in json.load(open('production/topics.json',encoding='utf-8'))['topics'] if t['id']=='famous-001')
+          research=json.load(open('production/research-library/famous-001.json',encoding='utf-8'))
+          editorial=json.load(open('channel/editorial.json',encoding='utf-8'))
+          prompt=build_prompt(topic,research,editorial)
+          research_cost=float(research.get('estimated_cost_usd') or 0)
+          max_output_tokens=4100
+          input_chars=len(prompt)+len(json.dumps(EPISODE_TOOL,ensure_ascii=False))
+          estimated_input_tokens=max(1,int(input_chars/2.5))
+          conservative_total=research_cost + estimated_input_tokens/1_000_000*2.0 + max_output_tokens/1_000_000*10.0
+          print('Amazon paid research already spent:', round(research_cost,6))
+          print('Estimated Sonnet input tokens:', estimated_input_tokens)
+          print('Worst-case total at current output cap:', round(conservative_total,6))
+          if conservative_total > 0.080:
+              raise SystemExit(f'Amazon exceeds $0.080 budget before Sonnet: ${conservative_total:.6f}')
+          PY

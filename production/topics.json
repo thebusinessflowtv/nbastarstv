@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "channel": "NBA Stars",
+  "strategy": {
+    "cadence": "1 long-form episode per day",
+    "market": "United States",
+    "format": "8-16 minute faceless NBA storytelling documentary",
+    "packaging": "high-curiosity, high-CTR, factual clickbait",
+    "rule": "Final titles, statistics, rumors, injuries, trades and thumbnail claims must be re-researched before production. Seeds are angles, not verified assertions."
+  },
+  "topics": []
+}

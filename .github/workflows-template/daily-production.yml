@@ -1,0 +1,452 @@
+name: NBA Stars Daily Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic_id:
+        description: 'Optional topic id. Blank = next ready topic.'
+        required: false
+        type: string
+      upload_and_schedule:
+        description: 'Upload and schedule on YouTube when audit + media gates are approved.'
+        required: true
+        default: false
+        type: boolean
+  schedule:
+    - cron: '0 13 * * *'
+  push:
+    paths:
+      - 'production/run-now.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: the-business-flow-anthropic-production
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_RESEARCH_MODEL: ${{ vars.ANTHROPIC_RESEARCH_MODEL || 'claude-haiku-4-5-20251001' }}
+      ANTHROPIC_SCRIPT_MODEL: ${{ vars.ANTHROPIC_SCRIPT_MODEL || 'claude-sonnet-5' }}
+      ANTHROPIC_RESEARCH_MAX_USD: ${{ vars.ANTHROPIC_RESEARCH_MAX_USD || '0.030' }}
+      ANTHROPIC_TOTAL_BUDGET_USD: '0.100'
+      VISUAL_IMAGE_TARGET: '50'
+      VISUAL_IMAGE_MIN: '40'
+      VISUAL_MAX_PER_QUERY: '7'
+      YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+      YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+      YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+      YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
+      TTS_VOICE: ${{ vars.TTS_VOICE || 'en-US-AndrewNeural' }}
+      TTS_RATE: ${{ vars.TTS_RATE || '-4%' }}
+      PUBLISH_HOUR_ET: ${{ vars.PUBLISH_HOUR_ET || '18' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Resolve mode, gates and topic
+        id: setup
+        shell: bash
+        env:
+          INPUT_TOPIC: ${{ inputs.topic_id }}
+          INPUT_UPLOAD: ${{ inputs.upload_and_schedule }}
+          LICENSE_GATE: ${{ vars.MEDIA_LICENSES_APPROVED }}
+          AUDIT_GATE: ${{ vars.YOUTUBE_API_AUDIT_APPROVED }}
+        run: |
+          set -euo pipefail
+          test -n "$ANTHROPIC_API_KEY" || { echo 'Missing ANTHROPIC_API_KEY'; exit 1; }
+
+          REQUEST_UPLOAD=false
+          if [ "${GITHUB_EVENT_NAME}" = "schedule" ]; then
+            REQUEST_UPLOAD=true
+          elif [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && [ "${INPUT_UPLOAD:-false}" = "true" ]; then
+            REQUEST_UPLOAD=true
+          fi
+
+          SHOULD_UPLOAD=false
+          if [ "$REQUEST_UPLOAD" = "true" ] && [ "${AUDIT_GATE:-}" = "true" ] && [ "${LICENSE_GATE:-}" = "true" ]; then
+            test -n "$YOUTUBE_CLIENT_ID" || { echo 'Missing YOUTUBE_CLIENT_ID'; exit 1; }
+            test -n "$YOUTUBE_CLIENT_SECRET" || { echo 'Missing YOUTUBE_CLIENT_SECRET'; exit 1; }
+            test -n "$YOUTUBE_REFRESH_TOKEN" || { echo 'Missing YOUTUBE_REFRESH_TOKEN'; exit 1; }
+            test -n "$YOUTUBE_CHANNEL_ID" || { echo 'Missing YOUTUBE_CHANNEL_ID'; exit 1; }
+            SHOULD_UPLOAD=true
+          elif [ "$REQUEST_UPLOAD" = "true" ]; then
+            echo 'Public/scheduled YouTube auto-upload is gated. This run will render; the private-upload workflow handles validated private delivery.'
+          fi
+          echo "should_upload=$SHOULD_UPLOAD" >> "$GITHUB_OUTPUT"
+
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          from pathlib import Path
+          d=json.load(open('production/topics.json', encoding='utf-8'))
+          wanted=(os.environ.get('INPUT_TOPIC') or '').strip()
+          if not wanted and os.environ.get('GITHUB_EVENT_NAME') == 'push':
+              trigger=Path('production/run-now.json')
+              if trigger.exists():
+                  wanted=str(json.loads(trigger.read_text(encoding='utf-8')).get('topic_id') or '').strip()
+          topics=d.get('topics') or []
+          item=next((t for t in topics if str(t.get('id')) == wanted), None) if wanted else next((t for t in topics if t.get('status') == 'ready'), None)
+          if not item:
+              raise SystemExit('Requested/ready topic not found')
+          print(f"topic_id={item['id']}")
+          print(f"topic_name={item['topic']}")
+          PY
+
+      - name: Restore Haiku research cache
+        id: research-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: production/research-cache/${{ steps.setup.outputs.topic_id }}
+          key: tbf-haiku-research-v2-${{ steps.setup.outputs.topic_id }}
+
+      - name: Restore Sonnet package cache
+        id: package-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: production/package-cache/${{ steps.setup.outputs.topic_id }}
+          key: tbf-sonnet-package-v3-${{ steps.setup.outputs.topic_id }}
+
+      - name: Restore visual asset cache
+        id: visual-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: production/visual-cache/${{ steps.setup.outputs.topic_id }}
+          key: tbf-visual-v1-${{ steps.setup.outputs.topic_id }}-${{ github.run_id }}
+          restore-keys: |
+            tbf-visual-v1-${{ steps.setup.outputs.topic_id }}-
+
+      - name: Hydrate durable research checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          LIBRARY="production/research-library/${{ steps.setup.outputs.topic_id }}.json"
+          CACHE="production/research-cache/${{ steps.setup.outputs.topic_id }}/research.json"
+          if [ -s "$LIBRARY" ]; then
+            mkdir -p "$(dirname "$CACHE")"
+            cp "$LIBRARY" "$CACHE"
+            echo 'Durable research checkpoint restored. No Haiku call will be needed.'
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install and validate free runtime dependencies first
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pip
+          pip install -r production/requirements.txt
+          pip install -r youtube-worker/requirements.txt
+          git lfs pull
+          python -m py_compile production/anthropic_budget.py production/research_episode.py production/generate_episode.py production/generate_episode_v3.py production/recover_paid_episode.py production/recover_paid_episode_v3.py production/collect_visual_assets.py production/render_episode.py
+          test -s media-library/catalog.json
+          ffmpeg -version >/dev/null
+
+      - name: Prepare media catalog for this run
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.setup.outputs.should_upload }}" = "true" ]; then
+            python - <<'PY'
+          import json
+          d=json.load(open('media-library/catalog.json', encoding='utf-8'))
+          approved=sum(a.get('commercial_use_status') == 'approved' for a in d.get('assets', []))
+          print('Persistently approved media:', approved)
+          if approved < 40:
+              raise SystemExit('Auto-upload requires at least 40 persistently approved media assets')
+          PY
+          else
+            python - <<'PY'
+          import json
+          p='media-library/catalog.json'
+          d=json.load(open(p, encoding='utf-8'))
+          changed=0
+          for a in d.get('assets', []):
+              if a.get('commercial_use_status') == 'review_required':
+                  a['commercial_use_status']='approved'
+                  changed += 1
+          json.dump(d, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+          approved=sum(a.get('commercial_use_status') == 'approved' for a in d.get('assets', []))
+          print('Render-only runtime media enabled:', changed, 'review-required assets; total usable:', approved)
+          if approved < 40:
+              raise SystemExit('Need at least 40 usable assets for render-only production')
+          PY
+          fi
+
+      - name: Haiku 4.5 research — at most one search, cache first
+        id: research
+        shell: bash
+        run: python production/research_episode.py --topic-id "${{ steps.setup.outputs.topic_id }}"
+
+      - name: Save Haiku paid state immediately
+        if: always() && steps.research-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: production/research-cache/${{ steps.setup.outputs.topic_id }}
+          key: ${{ steps.research-cache.outputs.cache-primary-key }}
+
+      - name: Promote valid research to durable checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="production/research-cache/${{ steps.setup.outputs.topic_id }}/research.json"
+          DST="production/research-library/${{ steps.setup.outputs.topic_id }}.json"
+          test -s "$SRC"
+          mkdir -p production/research-library
+          cp "$SRC" "$DST"
+
+      - name: Collect up to 50 topic-specific 16:9 images — free web sources, cache first
+        id: visuals
+        continue-on-error: true
+        shell: bash
+        env:
+          ANTHROPIC_API_KEY: ''
+        run: |
+          set -euo pipefail
+          python production/collect_visual_assets.py \
+            --topic-id "${{ steps.setup.outputs.topic_id }}" \
+            --research "production/research-cache/${{ steps.setup.outputs.topic_id }}/research.json" \
+            --target 50
+
+      - name: Save visual work immediately
+        if: always() && steps.visual-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: production/visual-cache/${{ steps.setup.outputs.topic_id }}
+          key: ${{ steps.visual-cache.outputs.cache-primary-key }}
+
+      - name: Verify topic visual package before any Sonnet/render work
+        shell: bash
+        run: |
+          set -euo pipefail
+          MANIFEST="production/visual-cache/${{ steps.setup.outputs.topic_id }}/visual-assets.json"
+          test -s "$MANIFEST"
+          python - "$MANIFEST" <<'PY'
+          import json, pathlib, sys
+          p=pathlib.Path(sys.argv[1])
+          d=json.loads(p.read_text(encoding='utf-8'))
+          assets=d.get('assets') or []
+          if len(assets) < 40:
+              raise SystemExit(f'Only {len(assets)} topic images collected; need at least 40')
+          assert all(int(a.get('width') or 0)==1280 and int(a.get('height') or 0)==720 for a in assets)
+          assert d.get('logos_excluded') is True
+          print('Topic visuals verified:', len(assets), 'unique 16:9 images; Anthropic visual calls: 0')
+          PY
+
+      - name: Sonnet 5 writing — script first, no web, cache first
+        id: sonnet
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf production/output
+          python production/generate_episode_v3.py --topic-id "${{ steps.setup.outputs.topic_id }}"
+
+      - name: Save Sonnet paid state immediately
+        if: always() && steps.package-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: production/package-cache/${{ steps.setup.outputs.topic_id }}
+          key: ${{ steps.package-cache.outputs.cache-primary-key }}
+
+      - name: Recover already-paid Sonnet output locally
+        if: steps.sonnet.outcome == 'failure' && hashFiles(format('production/package-cache/{0}/sonnet-response.json', steps.setup.outputs.topic_id)) != ''
+        shell: bash
+        env:
+          ANTHROPIC_API_KEY: ''
+        run: |
+          set -euo pipefail
+          echo 'A paid Sonnet snapshot exists. Repairing locally; Anthropic API is disabled for this step.'
+          python production/recover_paid_episode_v3.py --topic-id "${{ steps.setup.outputs.topic_id }}"
+
+      - name: Fail clearly when Sonnet failed before creating a paid snapshot
+        if: steps.sonnet.outcome == 'failure' && hashFiles(format('production/package-cache/{0}/sonnet-response.json', steps.setup.outputs.topic_id)) == ''
+        shell: bash
+        run: |
+          echo 'Sonnet failed before a paid response existed; inspect the preflight error.'
+          exit 1
+
+      - name: Verify publication package before render
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE="production/output/${{ steps.setup.outputs.topic_id }}/episode-package.json"
+          test -s "$PACKAGE"
+          python - "$PACKAGE" <<'PY'
+          import json, sys
+          p=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert p.get('script')
+          assert p.get('selected_title')
+          assert p.get('tags')
+          total=float((p.get('anthropic_cost') or {}).get('total_usd') or 0)
+          assert total <= 0.100, total
+          print('Package verified:', p['selected_title'])
+          print('Anthropic total:', total)
+          PY
+
+      - name: Render and validate — 40-50 images, 5-8 unique videos, zero loops
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE="production/output/${{ steps.setup.outputs.topic_id }}/episode-package.json"
+          rm -rf production/rendered
+          python production/render_episode.py --package "$PACKAGE" --output-dir production/rendered
+          test -s production/rendered/final.mp4
+          test -s production/rendered/thumbnail.png
+          test -s production/rendered/metadata.json
+          test -s production/rendered/selected-assets.json
+          test -s production/rendered/scene-plan.json
+          ffmpeg -v error -i production/rendered/final.mp4 -f null -
+          ffmpeg -v error -i production/rendered/final.mp4 -map 0:a:0 -f null -
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 production/rendered/final.mp4)"
+          python - "$DURATION" <<'PY'
+          import json, sys
+          d=float(sys.argv[1])
+          if not 600 <= d <= 1800:
+              raise SystemExit(f'Bad duration: {d:.2f}s')
+          plan=json.load(open('production/rendered/selected-assets.json', encoding='utf-8'))
+          ids=[x['asset_id'] for x in plan]
+          if len(ids) != len(set(ids)):
+              raise SystemExit('Repeated asset detected')
+          if any(x.get('looped') for x in plan):
+              raise SystemExit('Video loop detected')
+          images=sum(x.get('asset_type')=='image' for x in plan)
+          videos=sum(x.get('asset_type')=='video' for x in plan)
+          if images < 40:
+              raise SystemExit(f'Not enough topic images in final timeline: {images}')
+          if videos > 8:
+              raise SystemExit(f'Too many supporting videos: {videos}')
+          print('Validated duration:', round(d,2), '| images:', images, '| videos:', videos, '| loops: 0')
+          PY
+
+      - name: Upload and schedule after audit + license approval
+        if: steps.setup.outputs.should_upload == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python youtube-worker/youtube_private_uploader.py \
+            --video production/rendered/final.mp4 \
+            --thumbnail production/rendered/thumbnail.png \
+            --metadata production/rendered/metadata.json \
+            --checkpoint production/rendered/youtube-upload.json
+          python production/mark_topic_used.py \
+            --package "production/output/${{ steps.setup.outputs.topic_id }}/episode-package.json" \
+            --checkpoint production/rendered/youtube-upload.json
+
+      - name: Checkpoint render-only topic
+        if: steps.setup.outputs.should_upload != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          p='production/topics.json'
+          d=json.load(open(p, encoding='utf-8'))
+          topic_id='${{ steps.setup.outputs.topic_id }}'
+          for t in d.get('topics', []):
+              if str(t.get('id')) == topic_id:
+                  t['status']='rendered_pending_manual_upload'
+                  t['rendered_at']=datetime.now(timezone.utc).isoformat()
+                  break
+          else:
+              raise SystemExit('Topic not found for checkpoint')
+          json.dump(d, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+          PY
+
+      - name: Preserve completed production artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tbf-production-${{ steps.setup.outputs.topic_id }}-${{ github.run_id }}
+          path: |
+            production/research-library/${{ steps.setup.outputs.topic_id }}.json
+            production/visual-cache/${{ steps.setup.outputs.topic_id }}/visual-assets.json
+            production/output/${{ steps.setup.outputs.topic_id }}/
+            production/rendered/final.mp4
+            production/rendered/thumbnail.png
+            production/rendered/metadata.json
+            production/rendered/selected-assets.json
+            production/rendered/scene-plan.json
+            production/rendered/youtube-upload.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Commit durable checkpoints safely
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'NBA Stars Factory'
+          git config user.email 'thebusinessflowtv@gmail.com'
+          git restore --worktree media-library/catalog.json || true
+          git add production/topics.json "production/research-library/${{ steps.setup.outputs.topic_id }}.json"
+          if git diff --cached --quiet; then
+            echo 'No checkpoint change to commit.'
+            exit 0
+          fi
+          git commit -m "Checkpoint produced topic ${{ steps.setup.outputs.topic_id }}"
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
+
+      - name: Recovery artifact on any failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tbf-recovery-${{ steps.setup.outputs.topic_id }}-${{ github.run_id }}
+          path: |
+            production/research-library/${{ steps.setup.outputs.topic_id }}.json
+            production/research-cache/${{ steps.setup.outputs.topic_id }}/
+            production/package-cache/${{ steps.setup.outputs.topic_id }}/
+            production/visual-cache/${{ steps.setup.outputs.topic_id }}/visual-assets.json
+            production/output/${{ steps.setup.outputs.topic_id }}/
+            production/rendered/final.mp4
+            production/rendered/thumbnail.png
+            production/rendered/metadata.json
+            production/rendered/selected-assets.json
+            production/rendered/scene-plan.json
+            production/rendered/youtube-upload.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Cost summary
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          topic='${{ steps.setup.outputs.topic_id }}'
+          print('### NBA Stars Production')
+          print(f'- Topic: {topic} / ${{ steps.setup.outputs.topic_name }}')
+          path=Path(f'production/output/{topic}/episode-package.json')
+          if path.exists():
+              p=json.loads(path.read_text(encoding='utf-8'))
+              c=p.get('anthropic_cost') or {}
+              print(f"- Haiku research: ${float(c.get('research_usd') or 0):.4f}")
+              print(f"- Sonnet script: ${float(c.get('script_usd') or 0):.4f}")
+              print(f"- Anthropic total: ${float(c.get('total_usd') or 0):.4f}")
+          else:
+              print('- Episode package not completed; inspect cached/recovery state before any retry.')
+          visual=Path(f'production/visual-cache/{topic}/visual-assets.json')
+          if visual.exists():
+              v=json.loads(visual.read_text(encoding='utf-8'))
+              print(f"- Topic-specific images: {len(v.get('assets') or [])}")
+              print('- Additional Anthropic cost for visual collection: $0.0000')
+          print('- Paid Haiku/Sonnet outputs are cached before rendering; visual downloads are cached independently.')
+          print('- Automatic public/scheduled upload gate: ${{ steps.setup.outputs.should_upload }}')
+          PY

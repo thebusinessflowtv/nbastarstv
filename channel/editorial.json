@@ -1,0 +1,69 @@
+{
+  "language": "English (United States)",
+  "audience": "United States and global English-speaking NBA and basketball fans",
+  "format": "high-retention NBA storytelling documentary",
+  "target_duration_minutes": [8, 16],
+  "core_topics": [
+    "NBA player stories",
+    "NBA team stories",
+    "basketball curiosities",
+    "NBA rivalries",
+    "rise and fall of players",
+    "forgotten stars",
+    "strange NBA rules and records",
+    "historic games and moments",
+    "draft stories and career turning points",
+    "trades and decisions that changed teams",
+    "NBA technology and evolution",
+    "current NBA stories with evergreen narrative value"
+  ],
+  "tone": ["cinematic", "energetic", "curious", "fan-aware", "fact-based", "story-driven"],
+  "packaging_strategy": {
+    "goal": "Maximize qualified CTR and retention with strong basketball emotion, recognizable stars and factual curiosity gaps.",
+    "title_style": [
+      "recognizable player or team plus an unresolved contradiction",
+      "what happened to a player, team or era",
+      "the NBA player who did something extraordinary or unexpected",
+      "a strange rule, record, trade or decision explained through a human story",
+      "nobody expected this player or team to become what they became",
+      "current NBA events reframed as durable stories rather than score recaps"
+    ],
+    "title_avoid": [
+      "generic game recaps",
+      "unsupported rumors",
+      "fake trades",
+      "fabricated quotes",
+      "claims about private motives without evidence",
+      "titles that depend only on a score and lose relevance within hours"
+    ],
+    "thumbnail": {
+      "text_words_max": 3,
+      "default_text_words": 0,
+      "principles": [
+        "one dominant recognizable player whenever possible",
+        "extreme foreground and strong facial expression when relevant",
+        "one narrative object such as a ball, jersey, trophy, scoreboard element or arena",
+        "clear foreground, midground and background depth",
+        "strong visual contrast and mobile readability",
+        "use hands, gaze and objects as visual vectors",
+        "avoid clutter and infographic-style layouts",
+        "thumbnail must create curiosity before the title is read"
+      ]
+    },
+    "title_candidates_per_episode": 10,
+    "thumbnail_variants_per_episode": 3
+  },
+  "rules": [
+    "Prioritize NBA subjects with strong recognition in the United States.",
+    "Mix evergreen player and team stories with timely NBA opportunities.",
+    "Never fabricate trades, injuries, quotes, statistics, scandals, crimes or motives.",
+    "Verify statistics, contracts, dates and records with reliable sources before using them.",
+    "Clearly separate verified fact from interpretation and fan debate.",
+    "Use factual clickbait: aggressive curiosity gaps are encouraged, false promises are not.",
+    "Do not rely on unlicensed broadcast footage as the core visual strategy.",
+    "The first 20 seconds must establish a contradiction, consequence or unanswered question.",
+    "Plant one central reveal loop in the opening and resolve it near the end.",
+    "Every 45-90 seconds introduce a new question, reversal, comparison, statistic or consequence.",
+    "The ending must resolve the exact promise made by the title and opening hook."
+  ]
+}
