@@ -1,0 +1,43 @@
+name: Apply NBA daily summary fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-daily-summary-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch daily production summary
+        run: python tools/fix_nba_daily_summary.py
+
+      - name: Validate workflow patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -F 'topic_name = ${{ toJSON(steps.setup.outputs.topic_name) }}' .github/workflows/daily-production.yml
+
+      - name: Commit fix
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'NBA Stars Factory'
+          git config user.email 'thebusinessflowtv@gmail.com'
+          git add .github/workflows/daily-production.yml
+          if git diff --cached --quiet; then
+            echo 'Daily summary fix already applied.'
+            exit 0
+          fi
+          git commit -m 'fix(factory): make daily summary safe for apostrophes'
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
