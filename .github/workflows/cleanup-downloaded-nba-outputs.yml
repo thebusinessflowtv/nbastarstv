@@ -1,0 +1,80 @@
+name: Cleanup downloaded NBA outputs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cleanup-downloaded-nba-outputs.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Delete downloaded GitHub video/thumbnail artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Keep the tiny Luka script artifact (10898763418). Remove video/thumbnail/packages only.
+          IDS=(
+            10898628351
+            10899397532
+            10898583526
+            10904288009
+            10905451727
+          )
+          for id in "${IDS[@]}"; do
+            code="$(curl -sS -o /tmp/delete-artifact.json -w '%{http_code}' \
+              -X DELETE \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${id}")"
+            if [ "$code" = "204" ] || [ "$code" = "404" ]; then
+              echo "Artifact $id removed/already absent (HTTP $code)."
+            else
+              cat /tmp/delete-artifact.json
+              echo "Failed deleting artifact $id (HTTP $code)."
+              exit 1
+            fi
+          done
+
+      - name: Request GitHub OIDC identity for MediaForge storage
+        id: oidc
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="${ACTIONS_ID_TOKEN_REQUEST_URL}${ACTIONS_ID_TOKEN_REQUEST_URL:+&}audience=mfcc-storage"
+          if [[ "$ACTIONS_ID_TOKEN_REQUEST_URL" != *"?"* ]]; then
+            URL="${ACTIONS_ID_TOKEN_REQUEST_URL}?audience=mfcc-storage"
+          fi
+          TOKEN="$(curl -fsS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$URL" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Delete stored video thumbnail and HLS copies, preserve scripts
+        env:
+          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for production_id in \
+            d41a3f39-6192-47ae-a25c-a56ef73cd970 \
+            664a58d3-02bc-485e-87fd-4f54b38a3056 \
+            c052ab1f-7ee4-400e-93e2-e8a8fe3ba2dc
+          do
+            curl -fsS \
+              -X POST \
+              -H "Authorization: Bearer $OIDC_TOKEN" \
+              -H 'Content-Type: application/json' \
+              -d "{\"production_id\":\"${production_id}\",\"action\":\"delete_outputs\"}" \
+              'https://fykwalznmcrjgnyveagy.supabase.co/functions/v1/mfcc-storage-ticket'
+            echo
+          done
