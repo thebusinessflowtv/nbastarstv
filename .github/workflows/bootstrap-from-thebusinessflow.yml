@@ -1,4 +1,3 @@
-# bootstrap trigger v2
 name: NBA Stars Bootstrap from The Business Flow
 
 on:
@@ -19,9 +18,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Clone The Business Flow source
+      - name: Clone The Business Flow source without LFS payloads
         run: |
-          git clone --depth 1 https://github.com/thebusinessflowtv/thebusinessflow.git /tmp/thebusinessflow
+          GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 https://github.com/thebusinessflowtv/thebusinessflow.git /tmp/thebusinessflow
 
       - name: Copy production architecture without old channel data
         shell: bash
@@ -35,22 +34,29 @@ jobs:
             --exclude 'README.md' \
             --exclude 'media-library/assets/' \
             --exclude 'media-library/catalog.json' \
+            --exclude 'media-library/intake-status.json' \
+            --exclude 'media-library/summary.json' \
             --exclude 'production/research-library/' \
             --exclude 'production/recovery-overrides/' \
+            --exclude 'production/youtube-checkpoints/' \
             --exclude 'production/*.request' \
             --exclude 'production/*-request.json' \
             --exclude 'production/queue-state.json' \
+            --exclude 'production/queue-kick.json' \
+            --exclude 'production/private-upload-now.json' \
             --exclude 'production/run-now.json' \
             --exclude 'production/tomorrow-batch.json' \
             --exclude 'production/bulk-topic-request.json' \
             --exclude 'production/custom-topic-request.json' \
+            --exclude 'production/topics.json' \
             /tmp/thebusinessflow/ ./
 
+          rm -rf .github/workflows-template
           mkdir -p .github/workflows-template
           cp -a /tmp/thebusinessflow/.github/workflows/. .github/workflows-template/
 
-          mkdir -p channel media-library/assets production/research-library production/recovery-overrides
-          touch media-library/assets/.gitkeep production/research-library/.gitkeep production/recovery-overrides/.gitkeep
+          mkdir -p channel media-library/assets production/research-library production/recovery-overrides production/youtube-checkpoints
+          touch media-library/assets/.gitkeep production/research-library/.gitkeep production/recovery-overrides/.gitkeep production/youtube-checkpoints/.gitkeep
 
       - name: Rebrand copied text files for NBA Stars
         shell: python
@@ -63,11 +69,13 @@ jobs:
               'the_business_flow_en': 'nba_stars_en',
               'THEBUSINESSFLOW_': 'NBASTARS_',
           }
-          skip = {'.git'}
-          text_ext = {'.py', '.json', '.yml', '.yaml', '.md', '.txt', '.html', '.sh', '.ps1', '.example', '.gitignore', '.gitattributes'}
+          text_ext = {'.py', '.json', '.yml', '.yaml', '.md', '.txt', '.html', '.sh', '.ps1', '.example'}
 
           for path in Path('.').rglob('*'):
-              if not path.is_file() or any(part in skip for part in path.parts):
+              if not path.is_file() or '.git' in path.parts:
+                  continue
+              # Never rewrite the active Actions workflow; copied workflows live safely in workflows-template.
+              if path.as_posix().startswith('.github/workflows/'):
                   continue
               if path.suffix.lower() not in text_ext and path.name not in {'.gitignore', '.gitattributes'}:
                   continue
@@ -81,7 +89,7 @@ jobs:
               if new != text:
                   path.write_text(new, encoding='utf-8')
 
-      - name: Write NBA Stars channel configuration
+      - name: Write NBA Stars channel files
         shell: bash
         run: |
           cat > channel/config.json <<'JSON'
@@ -127,14 +135,7 @@ jobs:
               "NBA technology and evolution",
               "current NBA stories with evergreen narrative value"
             ],
-            "tone": [
-              "cinematic",
-              "energetic",
-              "curious",
-              "fan-aware",
-              "fact-based",
-              "story-driven"
-            ],
+            "tone": ["cinematic", "energetic", "curious", "fan-aware", "fact-based", "story-driven"],
             "packaging_strategy": {
               "goal": "Maximize qualified CTR and retention with strong basketball emotion, recognizable stars and factual curiosity gaps.",
               "title_style": [
@@ -143,7 +144,6 @@ jobs:
                 "the NBA player who did something extraordinary or unexpected",
                 "a strange rule, record, trade or decision explained through a human story",
                 "nobody expected this player or team to become what they became",
-                "why fans still remember, hate, love or debate a documented basketball moment",
                 "current NBA events reframed as durable stories rather than score recaps"
               ],
               "title_avoid": [
@@ -160,7 +160,7 @@ jobs:
                 "principles": [
                   "one dominant recognizable player whenever possible",
                   "extreme foreground and strong facial expression when relevant",
-                  "one narrative object such as a ball, jersey, trophy, contract, scoreboard element or arena",
+                  "one narrative object such as a ball, jersey, trophy, scoreboard element or arena",
                   "clear foreground, midground and background depth",
                   "strong visual contrast and mobile readability",
                   "use hands, gaze and objects as visual vectors",
@@ -196,6 +196,29 @@ jobs:
             "total_bytes": 0,
             "duplicate_groups": {},
             "assets": []
+          }
+          JSON
+
+          cat > media-library/intake-status.json <<'JSON'
+          {"channel":"NBA Stars","status":"ready","asset_count":0}
+          JSON
+
+          cat > media-library/summary.json <<'JSON'
+          {"library":"NBA Stars Media Library","channel_key":"nba_stars_en","asset_count":0,"total_bytes":0}
+          JSON
+
+          cat > production/topics.json <<'JSON'
+          {
+            "version": 1,
+            "channel": "NBA Stars",
+            "strategy": {
+              "cadence": "1 long-form episode per day",
+              "market": "United States",
+              "format": "8-16 minute faceless NBA storytelling documentary",
+              "packaging": "high-curiosity, high-CTR, factual clickbait",
+              "rule": "Final titles, statistics, rumors, injuries, trades and thumbnail claims must be re-researched before production. Seeds are angles, not verified assertions."
+            },
+            "topics": []
           }
           JSON
 
@@ -236,7 +259,7 @@ jobs:
 
           This repository inherits the proven production architecture from **The Business Flow**, while keeping NBA Stars channel data, media, credentials and editorial rules isolated.
 
-          ## Target pipeline
+          ## Pipeline
 
           ```text
           Topic / editorial queue
@@ -262,9 +285,9 @@ jobs:
           - Default YouTube privacy: private
           - Editorial style: high-CTR, high-retention factual basketball storytelling
 
-          ## Repository migration
+          ## Migration policy
 
-          The production code and tooling are mirrored from The Business Flow. Historical business media, research packs, queue state and one-off recovery requests are intentionally not copied. Original workflows are preserved under `.github/workflows-template/` until NBA Stars credentials and channel-specific checks are configured.
+          Production code and tooling are mirrored from The Business Flow. Historical business media, research packs, queue state, checkpoints and one-off recovery requests are intentionally excluded. The original Actions workflows are preserved under `.github/workflows-template/` and remain disabled until NBA Stars secrets and channel-specific checks are configured.
 
           ## Safety rules
 
