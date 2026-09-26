@@ -7,5 +7,6 @@
   "upload_requested": false,
   "channel_name": "NBA Stars",
   "niche": "NBA / Players / Teams / Rivalries / Curiosities / Stories",
-  "locale": "en-US"
+  "locale": "en-US",
+  "retry_at": "2026-09-26T04:25:00Z"
 }
