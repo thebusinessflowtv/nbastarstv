@@ -34,7 +34,9 @@ console.log(`Uploading ${kind} (${fileSize} bytes) -> ${ticket.path}`);
 
 await new Promise((resolve,reject)=>{
   const upload=new tus.Upload(fs.createReadStream(filePath),{
-    endpoint:`https://${projectRef}.storage.supabase.co/storage/v1/upload/resumable`,
+    // The project gateway currently accepts the signed upload token reliably;
+    // the direct storage hostname rejected this token format as Invalid Compact JWS.
+    endpoint:`https://${projectRef}.supabase.co/storage/v1/upload/resumable`,
     uploadSize:fileSize,
     retryDelays:[0,3000,5000,10000,20000],
     headers:{'x-signature':ticket.token},
