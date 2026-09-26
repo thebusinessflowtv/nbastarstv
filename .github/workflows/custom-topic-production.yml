@@ -11,7 +11,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: the-business-flow-custom-topic-launcher
+  group: nba-stars-custom-topic-launcher
   cancel-in-progress: false
 
 jobs:
@@ -49,12 +49,12 @@ jobs:
           item['id'] = topic_id
           item['topic'] = topic_name
           item['status'] = 'ready'
-          item.setdefault('category', 'timely business/technology')
+          item.setdefault('category', 'NBA storytelling')
           item.setdefault('working_angle', topic_name)
           item.setdefault('title_seed', item['working_angle'])
-          item.setdefault('thumbnail_text_seed', 'NEW TECH')
+          item.setdefault('thumbnail_text_seed', 'NBA STORY')
           item.setdefault('click_score', 100)
-          item.setdefault('click_reason', 'User-requested timely episode.')
+          item.setdefault('click_reason', 'User-requested NBA Stars episode.')
           item['scored_at'] = now
 
           topics = data.get('topics') or []
@@ -89,15 +89,13 @@ jobs:
             echo 'Topic already registered; no queue commit needed.'
           fi
 
-      - name: Launch daily production for custom topic
+      - name: Ask sequential queue to start next topic
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          gh workflow run daily-production.yml \
+          gh workflow run video-queue-orchestrator.yml \
             --repo "${{ github.repository }}" \
-            --ref main \
-            -f topic_id="${{ steps.topic.outputs.topic_id }}" \
-            -f upload_and_schedule=false
-          echo "Dispatched daily-production.yml for ${{ steps.topic.outputs.topic_id }}"
+            --ref main
+          echo "Queued ${{ steps.topic.outputs.topic_id }} for serialized production."
