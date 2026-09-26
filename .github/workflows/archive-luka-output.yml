@@ -9,11 +9,12 @@ on:
 permissions:
   actions: read
   contents: read
+  id-token: write
 
 jobs:
   archive:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - name: Restore completed Luka production
@@ -42,7 +43,7 @@ jobs:
           Path('restored/rendered/script.txt').write_text(script+'\n',encoding='utf-8')
           PY
           echo "Recovered validated Luka production files."
-      - name: Save 4K video
+      - name: Save 4K video as GitHub artifact
         uses: actions/upload-artifact@v4
         with:
           name: mfcc-video-d41a3f39-6192-47ae-a25c-a56ef73cd970-${{ github.run_id }}
@@ -50,17 +51,37 @@ jobs:
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
-      - name: Save thumbnail
+      - name: Save thumbnail as GitHub artifact
         uses: actions/upload-artifact@v4
         with:
           name: mfcc-thumbnail-d41a3f39-6192-47ae-a25c-a56ef73cd970-${{ github.run_id }}
           path: restored/rendered/thumbnail.png
           if-no-files-found: error
           retention-days: 90
-      - name: Save script
+      - name: Save script as GitHub artifact
         uses: actions/upload-artifact@v4
         with:
           name: mfcc-script-d41a3f39-6192-47ae-a25c-a56ef73cd970-${{ github.run_id }}
           path: restored/rendered/script.txt
           if-no-files-found: error
           retention-days: 90
+      - name: Install resumable uploader
+        run: npm install --no-save tus-js-client@4
+      - name: Store Luka 4K video for direct streaming
+        env:
+          MFCC_PRODUCTION_ID: d41a3f39-6192-47ae-a25c-a56ef73cd970
+          MFCC_OUTPUT_KIND: video
+          MFCC_OUTPUT_FILE: restored/rendered/final.mp4
+        run: node tools/mfcc_upload_output.mjs
+      - name: Store Luka thumbnail
+        env:
+          MFCC_PRODUCTION_ID: d41a3f39-6192-47ae-a25c-a56ef73cd970
+          MFCC_OUTPUT_KIND: thumbnail
+          MFCC_OUTPUT_FILE: restored/rendered/thumbnail.png
+        run: node tools/mfcc_upload_output.mjs
+      - name: Store Luka script
+        env:
+          MFCC_PRODUCTION_ID: d41a3f39-6192-47ae-a25c-a56ef73cd970
+          MFCC_OUTPUT_KIND: script
+          MFCC_OUTPUT_FILE: restored/rendered/script.txt
+        run: node tools/mfcc_upload_output.mjs
