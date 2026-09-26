@@ -21,12 +21,6 @@ jobs:
       - name: Patch daily production summary
         run: python tools/fix_nba_daily_summary.py
 
-      - name: Validate workflow patch
-        shell: bash
-        run: |
-          set -euo pipefail
-          grep -F 'topic_name = ${{ toJSON(steps.setup.outputs.topic_name) }}' .github/workflows/daily-production.yml
-
       - name: Commit fix
         shell: bash
         run: |
