@@ -29,8 +29,9 @@
         "error_class": "ai_generation",
         "stage": "research"
       },
-      "status": "ready",
-      "scored_at": "2026-09-26T09:38:14.909231+00:00"
+      "status": "rendered_pending_manual_upload",
+      "scored_at": "2026-09-26T09:38:14.909231+00:00",
+      "rendered_at": "2026-09-26T11:30:47.682163+00:00"
     },
     {
       "id": "87e000b8-8f6a-4642-9e8f-237427cdb49b",

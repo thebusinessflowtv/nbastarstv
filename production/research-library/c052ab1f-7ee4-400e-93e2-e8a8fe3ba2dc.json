@@ -1,0 +1,114 @@
+{
+  "thesis": "Anthony Edwards transformed from promising prospect to franchise centerpiece, guiding the Timberwolves to back-to-back Western Conference Finals appearances and breaking Kevin Garnett's playoff scoring record in just five seasons.",
+  "facts": [
+    {
+      "claim": "Edwards led the 56–26 Timberwolves in the 2023–24 regular season, averaging 25.9 points and becoming the third-youngest player to score 6,000 career points.",
+      "source_url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "In the 2024 playoffs, Edwards averaged 31 points and 8 rebounds per game while sweeping the Phoenix Suns in the first round, including 40 points in the final game.",
+      "source_url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "At age 23, Edwards surpassed Kevin Garnett's franchise playoff scoring record of 1,049 points, accumulating 1,065 points in five seasons versus Garnett's 12 seasons.",
+      "source_url": "https://www.si.com/nba/anthony-edwards-timberwolves-history-kevin-garnett-game-2-loss",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Edwards reached back-to-back Western Conference Finals appearances in 2024 and 2025, ending a 20-year drought since the franchise's last conference finals trip in 2004.",
+      "source_url": "https://theleadsm.com/anthony-edwards-timberwolves-have-mountains-to-build-on/",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "The Timberwolves won 49 or more games in consecutive seasons for the first time in over two decades with Edwards as the unquestioned franchise cornerstone.",
+      "source_url": "https://sports.yahoo.com/article/minnesota-timberwolves-2024-2025-fantasy-140000057.html",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Edwards was drafted No. 1 overall in 2020, finished second in Rookie of the Year voting, and the franchise made first-round exits in 2022 and 2023 before his breakout 2023–24 season.",
+      "source_url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player",
+      "safe_for_packaging": true
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "1,065 playoff points",
+      "context": "Edwards' franchise record, surpassing Garnett's 1,049 in five seasons",
+      "source_url": "https://www.si.com/nba/anthony-edwards-timberwolves-history-kevin-garnett-game-2-loss"
+    },
+    {
+      "value": "56–26 regular season record",
+      "context": "2023–24 season win-loss record when Edwards averaged 25.9 ppg",
+      "source_url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player"
+    },
+    {
+      "value": "31 points, 8 rebounds per game",
+      "context": "Edwards' 2024 playoff averages during first-round sweep of Phoenix Suns",
+      "source_url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player"
+    },
+    {
+      "value": "20 years",
+      "context": "Time since Timberwolves' previous Western Conference Finals appearance in 2004",
+      "source_url": "https://theleadsm.com/anthony-edwards-timberwolves-have-mountains-to-build-on/"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "June 2020",
+      "event": "Edwards drafted No. 1 overall by Minnesota Timberwolves; finished second in Rookie of the Year voting to LaMelo Ball.",
+      "source_url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player"
+    },
+    {
+      "date": "March 2024",
+      "event": "Edwards becomes third-youngest NBA player to score 6,000 career points after breakout 2023–24 season with 25.9 ppg average.",
+      "source_url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player"
+    },
+    {
+      "date": "May 2024",
+      "event": "Edwards leads Timberwolves to first Western Conference Finals appearance in 20 years with 31 ppg playoff average; team reaches Western Conference Finals.",
+      "source_url": "https://theleadsm.com/anthony-edwards-timberwolves-have-mountains-to-build-on/"
+    },
+    {
+      "date": "May 2025",
+      "event": "Edwards surpasses Kevin Garnett's franchise playoff scoring record of 1,049 points at age 23, reaching 1,065 in five seasons.",
+      "source_url": "https://www.si.com/nba/anthony-edwards-timberwolves-history-kevin-garnett-game-2-loss"
+    }
+  ],
+  "sources": [
+    {
+      "title": "britannica.com",
+      "url": "https://www.britannica.com/biography/Anthony-Edwards-basketball-player",
+      "source_type": "web"
+    },
+    {
+      "title": "si.com",
+      "url": "https://www.si.com/nba/anthony-edwards-timberwolves-history-kevin-garnett-game-2-loss",
+      "source_type": "web"
+    },
+    {
+      "title": "theleadsm.com",
+      "url": "https://theleadsm.com/anthony-edwards-timberwolves-have-mountains-to-build-on/",
+      "source_type": "web"
+    },
+    {
+      "title": "sports.yahoo.com",
+      "url": "https://sports.yahoo.com/article/minnesota-timberwolves-2024-2025-fantasy-140000057.html",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "c052ab1f-7ee4-400e-93e2-e8a8fe3ba2dc",
+  "topic": "Anthony Edwards' emergence as Timberwolves franchise centerpiece and playoff success",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 13638,
+    "output_tokens": 1592,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.031598,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-26T10:47:11.519615+00:00"
+}
