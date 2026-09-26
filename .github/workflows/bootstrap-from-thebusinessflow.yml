@@ -1,0 +1,289 @@
+name: NBA Stars Bootstrap from The Business Flow
+
+on:
+  push:
+    paths:
+      - '.github/workflows/bootstrap-from-thebusinessflow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout NBA Stars repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone The Business Flow source
+        run: |
+          git clone --depth 1 https://github.com/thebusinessflowtv/thebusinessflow.git /tmp/thebusinessflow
+
+      - name: Copy production architecture without old channel data
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -a \
+            --exclude '.git/' \
+            --exclude '.github/workflows/' \
+            --exclude 'channel/' \
+            --exclude '.env.example' \
+            --exclude 'README.md' \
+            --exclude 'media-library/assets/' \
+            --exclude 'media-library/catalog.json' \
+            --exclude 'production/research-library/' \
+            --exclude 'production/recovery-overrides/' \
+            --exclude 'production/*.request' \
+            --exclude 'production/*-request.json' \
+            --exclude 'production/queue-state.json' \
+            --exclude 'production/run-now.json' \
+            --exclude 'production/tomorrow-batch.json' \
+            --exclude 'production/bulk-topic-request.json' \
+            --exclude 'production/custom-topic-request.json' \
+            /tmp/thebusinessflow/ ./
+
+          mkdir -p .github/workflows-template
+          cp -a /tmp/thebusinessflow/.github/workflows/. .github/workflows-template/
+
+          mkdir -p channel media-library/assets production/research-library production/recovery-overrides
+          touch media-library/assets/.gitkeep production/research-library/.gitkeep production/recovery-overrides/.gitkeep
+
+      - name: Rebrand copied text files for NBA Stars
+        shell: python
+        run: |
+          from pathlib import Path
+
+          replacements = {
+              'The Business Flow': 'NBA Stars',
+              'thebusinessflowtv/thebusinessflow': 'thebusinessflowtv/nbastarstv',
+              'the_business_flow_en': 'nba_stars_en',
+              'THEBUSINESSFLOW_': 'NBASTARS_',
+          }
+          skip = {'.git'}
+          text_ext = {'.py', '.json', '.yml', '.yaml', '.md', '.txt', '.html', '.sh', '.ps1', '.example', '.gitignore', '.gitattributes'}
+
+          for path in Path('.').rglob('*'):
+              if not path.is_file() or any(part in skip for part in path.parts):
+                  continue
+              if path.suffix.lower() not in text_ext and path.name not in {'.gitignore', '.gitattributes'}:
+                  continue
+              try:
+                  text = path.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+              new = text
+              for old, replacement in replacements.items():
+                  new = new.replace(old, replacement)
+              if new != text:
+                  path.write_text(new, encoding='utf-8')
+
+      - name: Write NBA Stars channel configuration
+        shell: bash
+        run: |
+          cat > channel/config.json <<'JSON'
+          {
+            "channel_name": "NBA Stars",
+            "channel_key": "nba_stars_en",
+            "locale": "en-US",
+            "primary_market": "United States",
+            "niche": "NBA / Basketball Stories, Curiosities and Documentaries",
+            "default_privacy_status": "private",
+            "youtube_category_id": "17",
+            "editorial_mode": "nba_storytelling_documentary",
+            "mediaforge_backend": "github-hosted",
+            "media_library": {
+              "provider": "github_lfs",
+              "repository": "thebusinessflowtv/nbastarstv",
+              "catalog_path": "media-library/catalog.json",
+              "assets_root": "media-library/assets",
+              "commercial_use_default": "review_required",
+              "deduplicate_by_sha256": true,
+              "prefer_unique_assets_per_video": true
+            }
+          }
+          JSON
+
+          cat > channel/editorial.json <<'JSON'
+          {
+            "language": "English (United States)",
+            "audience": "United States and global English-speaking NBA and basketball fans",
+            "format": "high-retention NBA storytelling documentary",
+            "target_duration_minutes": [8, 16],
+            "core_topics": [
+              "NBA player stories",
+              "NBA team stories",
+              "basketball curiosities",
+              "NBA rivalries",
+              "rise and fall of players",
+              "forgotten stars",
+              "strange NBA rules and records",
+              "historic games and moments",
+              "draft stories and career turning points",
+              "trades and decisions that changed teams",
+              "NBA technology and evolution",
+              "current NBA stories with evergreen narrative value"
+            ],
+            "tone": [
+              "cinematic",
+              "energetic",
+              "curious",
+              "fan-aware",
+              "fact-based",
+              "story-driven"
+            ],
+            "packaging_strategy": {
+              "goal": "Maximize qualified CTR and retention with strong basketball emotion, recognizable stars and factual curiosity gaps.",
+              "title_style": [
+                "recognizable player or team plus an unresolved contradiction",
+                "what happened to a player, team or era",
+                "the NBA player who did something extraordinary or unexpected",
+                "a strange rule, record, trade or decision explained through a human story",
+                "nobody expected this player or team to become what they became",
+                "why fans still remember, hate, love or debate a documented basketball moment",
+                "current NBA events reframed as durable stories rather than score recaps"
+              ],
+              "title_avoid": [
+                "generic game recaps",
+                "unsupported rumors",
+                "fake trades",
+                "fabricated quotes",
+                "claims about private motives without evidence",
+                "titles that depend only on a score and lose relevance within hours"
+              ],
+              "thumbnail": {
+                "text_words_max": 3,
+                "default_text_words": 0,
+                "principles": [
+                  "one dominant recognizable player whenever possible",
+                  "extreme foreground and strong facial expression when relevant",
+                  "one narrative object such as a ball, jersey, trophy, contract, scoreboard element or arena",
+                  "clear foreground, midground and background depth",
+                  "strong visual contrast and mobile readability",
+                  "use hands, gaze and objects as visual vectors",
+                  "avoid clutter and infographic-style layouts",
+                  "thumbnail must create curiosity before the title is read"
+                ]
+              },
+              "title_candidates_per_episode": 10,
+              "thumbnail_variants_per_episode": 3
+            },
+            "rules": [
+              "Prioritize NBA subjects with strong recognition in the United States.",
+              "Mix evergreen player and team stories with timely NBA opportunities.",
+              "Never fabricate trades, injuries, quotes, statistics, scandals, crimes or motives.",
+              "Verify statistics, contracts, dates and records with reliable sources before using them.",
+              "Clearly separate verified fact from interpretation and fan debate.",
+              "Use factual clickbait: aggressive curiosity gaps are encouraged, false promises are not.",
+              "Do not rely on unlicensed broadcast footage as the core visual strategy.",
+              "The first 20 seconds must establish a contradiction, consequence or unanswered question.",
+              "Plant one central reveal loop in the opening and resolve it near the end.",
+              "Every 45-90 seconds introduce a new question, reversal, comparison, statistic or consequence.",
+              "The ending must resolve the exact promise made by the title and opening hook."
+            ]
+          }
+          JSON
+
+          cat > media-library/catalog.json <<'JSON'
+          {
+            "version": 1,
+            "library": "NBA Stars Media Library",
+            "channel_key": "nba_stars_en",
+            "asset_count": 0,
+            "total_bytes": 0,
+            "duplicate_groups": {},
+            "assets": []
+          }
+          JSON
+
+      - name: Write NBA Stars environment template and README
+        shell: bash
+        run: |
+          cat > .env.example <<'ENV'
+          # Editorial / research
+          ANTHROPIC_API_KEY=
+          ANTHROPIC_RESEARCH_MODEL=claude-haiku-4-5-20251001
+          ANTHROPIC_SCRIPT_MODEL=claude-sonnet-5
+          ANTHROPIC_SCOUT_MODEL=claude-haiku-4-5-20251001
+          ANTHROPIC_RESEARCH_MAX_USD=0.030
+          ANTHROPIC_TOTAL_BUDGET_USD=0.080
+
+          # MediaForge encrypted runtime
+          MEDIAFORGE_CORE_KEY_B64=
+          MEDIAFORGE_VOICE_REFERENCE_B64=
+
+          # NBA Stars YouTube OAuth
+          YOUTUBE_CLIENT_ID=
+          YOUTUBE_CLIENT_SECRET=
+          YOUTUBE_REFRESH_TOKEN=
+          YOUTUBE_CHANNEL_ID=
+
+          # Optional runtime flags
+          NBASTARS_CHANNEL_KEY=nba_stars_en
+          NBASTARS_LOCALE=en-US
+          NBASTARS_MEDIA_PROVIDER=github_lfs
+          NBASTARS_MEDIA_ROOT=media-library/assets
+          YOUTUBE_DEFAULT_PRIVACY=private
+          ENV
+
+          cat > README.md <<'MD'
+          # NBA Stars — Automated YouTube Factory
+
+          English-first automated production system for **NBA Stars**.
+
+          This repository inherits the proven production architecture from **The Business Flow**, while keeping NBA Stars channel data, media, credentials and editorial rules isolated.
+
+          ## Target pipeline
+
+          ```text
+          Topic / editorial queue
+            -> research + fact checking
+            -> English (US) basketball story script
+            -> narration
+            -> media selection
+            -> MediaForge render
+            -> render validation
+            -> thumbnail
+            -> upload_ready
+            -> YouTube PRIVATE upload
+            -> youtube_video_id checkpoint
+            -> manual/publication gate
+          ```
+
+          ## Channel profile
+
+          - Channel: NBA Stars
+          - Locale: en-US
+          - Primary market: United States
+          - Niche: NBA stories, players, teams, curiosities and documentaries
+          - Default YouTube privacy: private
+          - Editorial style: high-CTR, high-retention factual basketball storytelling
+
+          ## Repository migration
+
+          The production code and tooling are mirrored from The Business Flow. Historical business media, research packs, queue state and one-off recovery requests are intentionally not copied. Original workflows are preserved under `.github/workflows-template/` until NBA Stars credentials and channel-specific checks are configured.
+
+          ## Safety rules
+
+          - Never commit YouTube OAuth credentials, API keys or voice-reference audio.
+          - YouTube uploads remain PRIVATE until the publication gate explicitly approves them.
+          - Use only media with a known and acceptable usage basis.
+          - Do not fabricate NBA trades, injuries, quotes, statistics or rumors.
+          - Keep NBA Stars code, media and credentials isolated in this repository.
+          MD
+
+      - name: Commit NBA Stars factory bootstrap
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No bootstrap changes to commit."
+            exit 0
+          fi
+          git commit -m "Bootstrap NBA Stars factory from The Business Flow"
+          git push origin HEAD:main
