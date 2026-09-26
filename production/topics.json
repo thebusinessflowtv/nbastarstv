@@ -10,6 +10,23 @@
   },
   "topics": [
     {
+      "id": "87e000b8-8f6a-4642-9e8f-237427cdb49b",
+      "topic": "LeBron James' age-defying performance and pursuit of all-time scoring record continuation",
+      "category": "NBA storytelling",
+      "working_angle": "LeBron James' age-defying performance and pursuit of all-time scoring record continuation",
+      "title_seed": "LeBron James' age-defying performance and pursuit of all-time scoring record continuation",
+      "thumbnail_text_seed": "NBA STORY",
+      "click_score": 100,
+      "click_reason": "Requested from MediaForge Control Center.",
+      "objective": "viral_ctr",
+      "upload_requested": false,
+      "mfcc_production_id": "87e000b8-8f6a-4642-9e8f-237427cdb49b",
+      "mfcc_channel_slug": "nba-stars",
+      "mfcc_requested_by": "cfa2b99a-68d0-41db-b5fa-1bda45f0506a",
+      "status": "ready",
+      "scored_at": "2026-09-26T04:48:54.235620+00:00"
+    },
+    {
       "id": "29fdcc7f-e751-4c1a-83fb-880ce022466f",
       "topic": "Jayson Tatum's shooting slump and offensive role changes with Celtics",
       "category": "NBA storytelling",
