@@ -1,0 +1,43 @@
+{
+  "request_id": "d41a3f39-6192-47ae-a25c-a56ef73cd970",
+  "mode": "suggest",
+  "objective": "viral_ctr",
+  "selected_index": null,
+  "suggestions": [
+    {
+      "topic": "Luka Doncic's injury history and durability concerns in 2024-25 season",
+      "title_idea": "Why Luka Doncic Can't Stay Healthy: The NBA's Most Fragile Superstar?",
+      "hook": "Despite being a generational talent, Luka has missed more games than any top-5 player in the league over the last two seasons.",
+      "reason": "Luka is a global superstar with massive fanbase; injury narratives drive concern and debate; directly impacts Mavericks championship odds.",
+      "score": 92
+    },
+    {
+      "topic": "Jayson Tatum's shooting slump and offensive role changes with Celtics",
+      "title_idea": "The Fall of Jayson Tatum: How Boston Made Their Superstar Disappear",
+      "hook": "Last season's Finals MVP is now taking fewer shots than role players—here's why the Celtics changed everything.",
+      "reason": "Tatum is a tier-1 star; Celtics are defending champs; shooting struggles are visually obvious in highlights; role questions fascinate fans.",
+      "score": 88
+    },
+    {
+      "topic": "Nikola Jokic's unprecedented three-time MVP achievement and historical dominance",
+      "title_idea": "Nikola Jokic Just Did Something No One Else Ever Could",
+      "hook": "Only player in NBA history to win three consecutive MVPs while carrying a mid-market team to contention.",
+      "reason": "Historic, record-breaking achievement; Jokic is universally respected; underdog narrative (Denver); stats are staggering and shareable.",
+      "score": 87
+    },
+    {
+      "topic": "Anthony Edwards' emergence as Timberwolves franchise centerpiece and playoff success",
+      "title_idea": "Anthony Edwards Is Becoming the Star We All Missed",
+      "hook": "From draft controversy to carrying Minnesota to the Western Conference Finals—here's how Ant became a superstar.",
+      "reason": "Young star in prime narrative arc; Wolves are exciting/relevant; Edwards is charismatic and quotable; underdog team story.",
+      "score": 84
+    },
+    {
+      "topic": "LeBron James' age-defying performance and pursuit of all-time scoring record continuation",
+      "title_idea": "LeBron James Refuses to Age: Is He Playing His Best Basketball?",
+      "hook": "At 39 years old, LeBron is still elite—and he's closer to breaking records nobody thought possible.",
+      "reason": "LeBron is the biggest name in basketball; GOAT debate drives engagement; age-defying narrative is inspirational and shareable; records matter.",
+      "score": 83
+    }
+  ]
+}
