@@ -1,0 +1,43 @@
+{
+  "request_id": "71162c2b-fd5f-46eb-9ae9-6dbae5abb92e",
+  "mode": "suggest",
+  "objective": "viral_ctr",
+  "selected_index": null,
+  "suggestions": [
+    {
+      "topic": "Jalen Brunson's contract situation and Knicks' salary cap crisis (January 2025)",
+      "title_idea": "Did the Knicks Make a MISTAKE with Jalen Brunson? The $156M Question",
+      "hook": "One year into his massive contract, Jalen Brunson's Knicks are struggling—was this the worst max deal in basketball?",
+      "reason": "Fresh contract debate, star player underperformance, New York market, divisive takes on front office decisions, perfect for comment section warfare",
+      "score": 92
+    },
+    {
+      "topic": "LeBron James' age vs. elite performance debate (December 2024/January 2025)",
+      "title_idea": "LeBron is 40 and STILL the Best Player on His Team—Is That Sad or INSANE?",
+      "hook": "While younger superstars struggle with injuries, LeBron continues elite production at an age where most players retire—what does this mean for the NBA?",
+      "reason": "GOAT debate fuel, generational divide in fanbases, longevity vs. decline narrative, highly polarizing among casual and hardcore fans",
+      "score": 89
+    },
+    {
+      "topic": "Bronny James' NBA struggles and nepotism criticism (ongoing through January 2025)",
+      "title_idea": "Bronny James is EMBARRASSING the NBA—Is LeBron's Nepotism Ruining Basketball?",
+      "hook": "After months of historically poor shooting and limited minutes, the question isn't whether Bronny belongs—it's whether his dad should've let him develop in the G-League first.",
+      "reason": "Generational wealth debate, fairness in sports, LeBron criticism (polarizing), parent-child dynamics, extremely comment-baiting",
+      "score": 87
+    },
+    {
+      "topic": "Donovan Mitchell's trade to the Cavaliers and impact on Eastern Conference (November 2024)",
+      "title_idea": "The Trade That Changed EVERYTHING—Cavs are Unstoppable With Donovan Mitchell",
+      "hook": "The Cavaliers' shocking mid-season acquisition of Donovan Mitchell has completely altered Eastern Conference power dynamics—was this the most underrated trade ever?",
+      "reason": "Recent trade impact, contender reshuffling, comparison of team trajectories, playoff implications, debate over trade winners/losers",
+      "score": 84
+    },
+    {
+      "topic": "The Warriors' three-point revolution obsolescence debate (December 2024/January 2025)",
+      "title_idea": "The Warriors' Dynasty is DEAD—Did the NBA Finally Figure Out Their Cheat Code?",
+      "hook": "Once unstoppable with their three-point barrage, the Warriors now struggle against defenses that have adapted—has the small-ball era ended?",
+      "reason": "Historical legacy debate, tactical evolution, franchise decline narrative, generational shift in basketball philosophy, nostalgia vs. present-day analysis",
+      "score": 81
+    }
+  ]
+}
