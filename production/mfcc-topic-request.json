@@ -1,12 +1,11 @@
 {
-  "request_id": "d41a3f39-6192-47ae-a25c-a56ef73cd970",
-  "production_id": "d41a3f39-6192-47ae-a25c-a56ef73cd970",
+  "request_id": "71162c2b-fd5f-46eb-9ae9-6dbae5abb92e",
+  "production_id": "71162c2b-fd5f-46eb-9ae9-6dbae5abb92e",
   "mode": "suggest",
   "objective": "viral_ctr",
-  "notes": "Um tema que seja uma notícia/fofoca de um grande jogador de basquete da atualizadade",
+  "notes": "Quero que seja um conteúdo atual, alguma notícia que tenha acontecido esse mês ou no máximo mês passado no mundo do basquete e que tenha muita repercursão. Quero criar um vídeo que talvez gere até hate, o objetivo dele é dividir oponiões. Inclusive em alguma parte do vídeo quero perguntar qual a opinião de quem tiver assistindo, para ter pessoas que fique do lado A e do lado B da história comente sua opinião.",
   "upload_requested": false,
   "channel_name": "NBA Stars",
   "niche": "NBA / Players / Teams / Rivalries / Curiosities / Stories",
-  "locale": "en-US",
-  "retry_at": "2026-09-26T04:25:00Z"
+  "locale": "en-US"
 }
