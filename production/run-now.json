@@ -1,8 +1,9 @@
 {
   "topic_id": "87e000b8-8f6a-4642-9e8f-237427cdb49b",
-  "reason": "retry_after_hardened_paid_sonnet_recovery",
-  "requested_at": "2026-09-27T18:34:00Z",
-  "recovery_engine": "nba_paid_snapshot_hardening_v1",
+  "reason": "retry_after_cached_sonnet_package_recovery_fix",
+  "requested_at": "2026-09-27T21:34:00Z",
+  "package_normalizer": "nba_cached_package_v2",
+  "recovery_engine": "nba_paid_snapshot_hardening_v2",
   "zoom_engine": "smooth_supersampled_v1",
   "tts_engine": "chunked_retry_fallback_v1"
 }
