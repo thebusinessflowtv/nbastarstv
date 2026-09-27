@@ -1,0 +1,109 @@
+{
+  "thesis": "In July 2024, Jalen Brunson signed a four-year, $156.5M extension with the Knicks—$113M less than the five-year, $269.1M max deal available in 2025—preserving salary cap flexibility and keeping the team below the punitive second apron threshold.",
+  "facts": [
+    {
+      "claim": "Brunson signed a four-year, $156.5 million veteran extension in July 2024, declining a five-year, $269.1 million max contract eligible in 2025.",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "The extension generated $37.1 million in future salary cap savings for the Knicks, providing relief from the second-apron payroll threshold.",
+      "source_url": "https://bleacherreport.com/articles/10128118-knicks-updated-salary-cap-luxury-tax-after-jalen-brunsons-4-year-1565m-contract",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Brunson's deal includes a fourth-year player option for 2028-29, allowing him to recoup forgone earnings via a $323M four-year or $418M five-year extension.",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "The extension keeps Brunson's salary below 23 percent of the salary cap annually, maintaining financial flexibility throughout the deal's duration.",
+      "source_url": "https://bleacherreport.com/articles/10128118-knicks-updated-salary-cap-luxury-tax-after-jalen-brunsons-4-year-1565m-contract",
+      "safe_for_packaging": false
+    },
+    {
+      "claim": "By staying below the second apron, the Knicks retain full flexibility to trade, sign free agents and use draft picks—benefits blocked at the second-apron level.",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Brunson's sacrifice mirrored championship-organization contract models, citing Patrick Mahomes' Chiefs, Tom Brady's Patriots and Derek Jeter's Yankees as structural blueprints.",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal",
+      "safe_for_packaging": true
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "$156.5 million",
+      "context": "Four-year contract extension signed by Brunson in July 2024",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal"
+    },
+    {
+      "value": "$113 million",
+      "context": "Difference between extension and eligible five-year max deal in 2025",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal"
+    },
+    {
+      "value": "$37.1 million",
+      "context": "Future salary cap savings generated for Knicks over three years",
+      "source_url": "https://bleacherreport.com/articles/10128118-knicks-updated-salary-cap-luxury-tax-after-jalen-brunsons-4-year-1565m-contract"
+    },
+    {
+      "value": "$39.1 million",
+      "context": "Average annual salary across four-year extension",
+      "source_url": "https://www.spotrac.com/nba/player/_/id/26999/jalen-brunson"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "July 12, 2024",
+      "event": "Brunson becomes eligible for maximum veteran extension and signs four-year, $156.5M deal same day",
+      "source_url": "https://www.spotrac.com/nba/player/_/id/26999/jalen-brunson"
+    },
+    {
+      "date": "2025-26 season",
+      "event": "Extension begins; Knicks remain below second-apron threshold with full trade and free-agency flexibility",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal"
+    },
+    {
+      "date": "2028-29 season",
+      "event": "Player option year; Brunson can opt out and pursue $323M four-year or $418M five-year maximum extension",
+      "source_url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal"
+    },
+    {
+      "date": "February 2025",
+      "event": "Knicks maintain $4.9M first-apron space and $15.7M buffer below second apron, with core roster secured through 2025-26",
+      "source_url": "https://bleacherreport.com/articles/10128118-knicks-updated-salary-cap-luxury-tax-after-jalen-brunsons-4-year-1565m-contract"
+    }
+  ],
+  "sources": [
+    {
+      "title": "espn.com",
+      "url": "https://www.espn.com/nba/story/_/id/40547744/knicks-jalen-brunson-accepts-1565m-113m-less-25-deal",
+      "source_type": "web"
+    },
+    {
+      "title": "bleacherreport.com",
+      "url": "https://bleacherreport.com/articles/10128118-knicks-updated-salary-cap-luxury-tax-after-jalen-brunsons-4-year-1565m-contract",
+      "source_type": "web"
+    },
+    {
+      "title": "spotrac.com",
+      "url": "https://www.spotrac.com/nba/player/_/id/26999/jalen-brunson",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "71162c2b-fd5f-46eb-9ae9-6dbae5abb92e",
+  "topic": "Jalen Brunson’s contract situation and Knicks’ salary cap crisis (January 2025)",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 13403,
+    "output_tokens": 1594,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.031373,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-27T23:11:30.915485+00:00"
+}
