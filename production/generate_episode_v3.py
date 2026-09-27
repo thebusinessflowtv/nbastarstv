@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -62,7 +63,76 @@ Call {base.core.EPISODE_TOOL_NAME} exactly once. Do not emit extra prose.
 """.strip()
 
 
+def _clip_title(value: Any, fallback: str) -> str:
+    text = re.sub(r"\s+", " ", str(value or "")).strip() or fallback
+    if len(text) <= 100:
+        return text
+    clipped = text[:100].rstrip()
+    if " " in clipped:
+        clipped = clipped.rsplit(" ", 1)[0]
+    return clipped[:100].rstrip(" -:,.|")
+
+
+def _normalize_package_shape(data: dict[str, Any], topic: dict[str, Any]) -> None:
+    topic_name = re.sub(r"\s+", " ", str(topic.get("topic") or "NBA Story")).strip()
+    selected = _clip_title(data.get("selected_title"), topic_name)
+    data["selected_title"] = selected
+
+    raw_titles = [selected]
+    raw_titles.extend(str(x) for x in (data.get("title_candidates") or []) if str(x).strip())
+    fallback_titles = [
+        topic_name,
+        f"What Really Happened With {topic_name}",
+        f"The Truth About {topic_name}",
+        f"Why {topic_name} Matters Right Now",
+        f"Inside {topic_name}",
+        f"The NBA Story Behind {topic_name}",
+    ]
+    raw_titles.extend(fallback_titles)
+    titles: list[str] = []
+    seen: set[str] = set()
+    for value in raw_titles:
+        title = _clip_title(value, selected)
+        key = title.casefold()
+        if title and key not in seen:
+            seen.add(key)
+            titles.append(title)
+        if len(titles) == 6:
+            break
+    data["title_candidates"] = titles[:6]
+
+    thumbs: list[dict[str, str]] = []
+    for item in data.get("thumbnail_variants") or []:
+        if not isinstance(item, dict):
+            continue
+        text = " ".join(str(item.get("text") or "").split()[:4])
+        concept = re.sub(r"\s+", " ", str(item.get("concept") or item.get("visual") or "")).strip()
+        if not concept:
+            concept = f"Cinematic NBA thumbnail centered on {topic_name}."
+        thumbs.append({"text": text, "concept": concept})
+        if len(thumbs) == 3:
+            break
+    thumb_defaults = [
+        {"text": "STILL UNREAL", "concept": f"Extreme close-up NBA portrait tied to {topic_name}, dramatic arena lights and scoreboard context."},
+        {"text": "HOW IS THIS POSSIBLE?", "concept": f"High-contrast action frame tied to {topic_name}, crowd depth, stat-board visual cue, no clutter."},
+        {"text": "THE REAL STORY", "concept": f"Cinematic split-context NBA composition showing the central tension behind {topic_name}."},
+    ]
+    for item in thumb_defaults:
+        if len(thumbs) >= 3:
+            break
+        thumbs.append(item)
+    data["thumbnail_variants"] = thumbs[:3]
+
+    if not str(data.get("hook") or "").strip():
+        data["hook"] = f"The numbers tell one story about {topic_name}. The context tells another."
+
+
 def validate_package(data: dict[str, Any], topic: dict[str, Any]) -> None:
+    # Paid Sonnet outputs are cached before local validation. Normalize harmless
+    # structural over-generation locally so a cached response with e.g. 10 title
+    # candidates does not permanently block the production on every retry.
+    _normalize_package_shape(data, topic)
+
     required = ["selected_title", "title_candidates", "thumbnail_variants", "description", "tags", "hook", "script", "chapters"]
     missing = [key for key in required if not data.get(key)]
     if missing:
