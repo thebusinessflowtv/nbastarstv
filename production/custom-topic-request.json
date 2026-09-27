@@ -1,15 +1,21 @@
 {
-  "id": "81e12029-ef61-4a32-9c4f-3bc53847ebec",
-  "topic": "Bronny James' NBA struggles and nepotism criticism (ongoing through January 2025)",
+  "id": "71162c2b-fd5f-46eb-9ae9-6dbae5abb92e",
+  "topic": "Jalen Brunson's contract situation and Knicks' salary cap crisis (January 2025)",
   "category": "NBA storytelling",
-  "working_angle": "Bronny James' NBA struggles and nepotism criticism (ongoing through January 2025)",
-  "title_seed": "Bronny James' NBA struggles and nepotism criticism (ongoing through January 2025)",
+  "working_angle": "Jalen Brunson's contract situation and Knicks' salary cap crisis (January 2025)",
+  "title_seed": "Jalen Brunson's contract situation and Knicks' salary cap crisis (January 2025)",
   "thumbnail_text_seed": "NBA STORY",
   "click_score": 100,
-  "click_reason": "Requested from MediaForge Control Center.",
+  "click_reason": "MediaForge Auto Heal retry.",
   "objective": "viral_ctr",
   "upload_requested": false,
-  "mfcc_production_id": "81e12029-ef61-4a32-9c4f-3bc53847ebec",
+  "mfcc_production_id": "71162c2b-fd5f-46eb-9ae9-6dbae5abb92e",
   "mfcc_channel_slug": "nba-stars",
-  "mfcc_requested_by": "cfa2b99a-68d0-41db-b5fa-1bda45f0506a"
+  "mfcc_requested_by": "cfa2b99a-68d0-41db-b5fa-1bda45f0506a",
+  "autoheal": {
+    "attempt": 1,
+    "nonce": "2026-09-27T21:41:34.273Z",
+    "error_class": "ai_generation",
+    "stage": "research"
+  }
 }
