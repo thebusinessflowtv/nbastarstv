@@ -23,8 +23,9 @@
       "mfcc_production_id": "81e12029-ef61-4a32-9c4f-3bc53847ebec",
       "mfcc_channel_slug": "nba-stars",
       "mfcc_requested_by": "cfa2b99a-68d0-41db-b5fa-1bda45f0506a",
-      "status": "ready",
-      "scored_at": "2026-09-27T21:46:24.489567+00:00"
+      "status": "rendered_pending_manual_upload",
+      "scored_at": "2026-09-27T21:46:24.489567+00:00",
+      "rendered_at": "2026-09-27T23:02:21.113531+00:00"
     },
     {
       "id": "71162c2b-fd5f-46eb-9ae9-6dbae5abb92e",

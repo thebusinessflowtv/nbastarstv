@@ -1,0 +1,92 @@
+{
+  "thesis": "Bronny James faced persistent on-court struggles and nepotism criticism following his 2024 draft selection and 2024–25 NBA debut, despite some league figures defending the pick and his incremental improvement trajectory.",
+  "facts": [
+    {
+      "claim": "<cite index=\"2-6\">Lakers drafted Bronny James 55th overall in the 2024 NBA Draft from USC</cite>, prompting widespread nepotism allegations.",
+      "source_url": "https://www.si.com/nba/lakers/onsi/news/former-lakers-center-slams-lebron-james-over-bronny-nepotism",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "<cite index=\"1-6\">In the 2024-25 season debut, Bronny appeared in 27 games off the bench</cite>, spending most time in G League development.",
+      "source_url": "https://sports.yahoo.com/articles/lebron-james-nepotism-claims-surrounding-121700248.html",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "<cite index=\"6-4\">In the 2024-25 season opener, Bronny and LeBron became the first father and son to play together in an NBA game</cite>.",
+      "source_url": "https://vnhsmirror.com/228040/athletics/bronny-james-joins-lakers-sparking-nepotism-debate-in-nba/",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "<cite index=\"3-8\">Former Lakers center Kwame Brown criticized Bronny's selection as nepotism</cite>, while other voices including Adrian Wojnarowski contextualized it within broader league nepotism.",
+      "source_url": "https://www.yardbarker.com/nba/articles/former_lakers_center_slams_lebron_james_over_bronny_nepotism/s1_16616_42863170",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "<cite index=\"8-13\">Stephen A. Smith stated publicly: \"We all know that Bronny James is in the NBA because of his dad\"</cite> during the 2024-25 season.",
+      "source_url": "https://www.foxnews.com/sports/stephen-a-smith-sounds-off-lebron-james-about-sons-playing-time-amid-struggles-stop-this.amp",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "<cite index=\"1-9\">In 2025-26, Bronny appeared in 42 games averaging 8.9 minutes per game, 2.9 points and 1.2 assists with 38.6% three-point shooting</cite>.",
+      "source_url": "https://sports.yahoo.com/articles/lebron-james-nepotism-claims-surrounding-121700248.html",
+      "safe_for_packaging": true
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "55th overall",
+      "context": "Bronny James 2024 NBA Draft selection by Lakers",
+      "source_url": "https://www.si.com/nba/lakers/onsi/news/former-lakers-center-slams-lebron-james-over-bronny-nepotism"
+    },
+    {
+      "value": "27 games",
+      "context": "Bronny's appearances in 2024-25 NBA season",
+      "source_url": "https://sports.yahoo.com/articles/lebron-james-nepotism-claims-surrounding-121700248.html"
+    },
+    {
+      "value": "2.9 points per game",
+      "context": "Bronny's scoring average in 2025-26 season across 42 games",
+      "source_url": "https://sports.yahoo.com/articles/lebron-james-nepotism-claims-surrounding-121700248.html"
+    },
+    {
+      "value": "38.6%",
+      "context": "Bronny's three-point shooting percentage in 2025-26 season",
+      "source_url": "https://sports.yahoo.com/articles/lebron-james-nepotism-claims-surrounding-121700248.html"
+    }
+  ],
+  "sources": [
+    {
+      "title": "si.com",
+      "url": "https://www.si.com/nba/lakers/onsi/news/former-lakers-center-slams-lebron-james-over-bronny-nepotism",
+      "source_type": "web"
+    },
+    {
+      "title": "sports.yahoo.com",
+      "url": "https://sports.yahoo.com/articles/lebron-james-nepotism-claims-surrounding-121700248.html",
+      "source_type": "web"
+    },
+    {
+      "title": "vnhsmirror.com",
+      "url": "https://vnhsmirror.com/228040/athletics/bronny-james-joins-lakers-sparking-nepotism-debate-in-nba/",
+      "source_type": "web"
+    },
+    {
+      "title": "yardbarker.com",
+      "url": "https://www.yardbarker.com/nba/articles/former_lakers_center_slams_lebron_james_over_bronny_nepotism/s1_16616_42863170",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "81e12029-ef61-4a32-9c4f-3bc53847ebec",
+  "topic": "Bronny James’ NBA struggles and nepotism criticism (ongoing through January 2025)",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 14679,
+    "output_tokens": 1597,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.032664,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-27T22:21:00.332228+00:00"
+}
