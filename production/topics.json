@@ -105,14 +105,15 @@
       "mfcc_production_id": "87e000b8-8f6a-4642-9e8f-237427cdb49b",
       "mfcc_channel_slug": "nba-stars",
       "mfcc_requested_by": "cfa2b99a-68d0-41db-b5fa-1bda45f0506a",
-      "status": "ready",
+      "status": "rendered_pending_manual_upload",
       "scored_at": "2026-09-27T17:44:20.379937+00:00",
       "autoheal": {
         "attempt": 2,
         "nonce": "2026-09-27T17:44:11.501Z",
         "error_class": "ai_generation",
         "stage": "script"
-      }
+      },
+      "rendered_at": "2026-09-27T22:19:26.780851+00:00"
     },
     {
       "id": "29fdcc7f-e751-4c1a-83fb-880ce022466f",

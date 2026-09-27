@@ -1,0 +1,114 @@
+{
+  "thesis": "At age 41, LeBron James continues to defy aging curves in professional basketball, averaging career-defining scoring numbers while extending his all-time record lead and remaining competitive in playoff competition.",
+  "facts": [
+    {
+      "claim": "LeBron James averaged 20.9 points per game at age 41, breaking the previous age-41 scoring record held by another player who averaged 10.1.",
+      "source_url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "James holds the records for most points per game at ages 37, 38, 39, 40 and 41, established over consecutive seasons starting in the 2021-22 season.",
+      "source_url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "In the 2026 postseason, LeBron averaged 23.2 points, 7.3 assists and 6.7 rebounds, leading the Lakers to upset the Houston Rockets in the first round.",
+      "source_url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "James is the only player in NBA history with 50,000 combined regular-season and playoff points, currently at 51,729 total career points.",
+      "source_url": "https://www.nba.com/news/19-playoff-stats-lebron-james-2026-playoffs",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "LeBron surpassed Kareem Abdul-Jabbar's all-time scoring record on February 7, 2023, and has since extended his lead to 43,440 regular-season career points.",
+      "source_url": "https://www.nba.com/news/19-playoff-stats-lebron-james-2026-playoffs",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Only three players in NBA history have played significant regular-season minutes at age 42, which LeBron James will do in the 2026-27 season barring injury.",
+      "source_url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/",
+      "safe_for_packaging": false
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "20.9 PPG",
+      "context": "LeBron James' scoring average at age 41 in 2025-26 season",
+      "source_url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/"
+    },
+    {
+      "value": "43,440",
+      "context": "LeBron James' career regular-season points total at end of 2025-26 season",
+      "source_url": "https://www.nba.com/news/19-playoff-stats-lebron-james-2026-playoffs"
+    },
+    {
+      "value": "51,729",
+      "context": "LeBron James' combined regular-season and playoff points total in 2026",
+      "source_url": "https://www.nba.com/news/19-playoff-stats-lebron-james-2026-playoffs"
+    },
+    {
+      "value": "23 seasons",
+      "context": "LeBron James' total seasons played in the NBA through 2025-26",
+      "source_url": "https://sportsportal.net/lebron-james-milestone-all-time-nba-records-broken/"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2021-22 season",
+      "event": "LeBron became oldest player to average at least 30 PPG, doing so after turning 37.",
+      "source_url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/"
+    },
+    {
+      "date": "February 7, 2023",
+      "event": "LeBron surpassed Kareem Abdul-Jabbar's all-time scoring record with 38,390 points vs Oklahoma City Thunder.",
+      "source_url": "https://www.nba.com/news/19-playoff-stats-lebron-james-2026-playoffs"
+    },
+    {
+      "date": "2025-26 season",
+      "event": "LeBron closed regular season with 43,440 career points while turning 41 years old on December 30, 2025.",
+      "source_url": "https://www.olympics.com/en/news/lebron-james-points-tracker-nba-all-time-top-scorer"
+    },
+    {
+      "date": "2026 playoffs",
+      "event": "At age 41, LeBron averaged 23.2 PPG and 7.3 APG in postseason, leading Lakers past Rockets in first round.",
+      "source_url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/"
+    }
+  ],
+  "sources": [
+    {
+      "title": "sportico.com",
+      "url": "https://www.sportico.com/leagues/basketball/2026/lebron-james-76ers-nba-scoring-stats-1234940311/",
+      "source_type": "web"
+    },
+    {
+      "title": "nba.com",
+      "url": "https://www.nba.com/news/19-playoff-stats-lebron-james-2026-playoffs",
+      "source_type": "web"
+    },
+    {
+      "title": "sportsportal.net",
+      "url": "https://sportsportal.net/lebron-james-milestone-all-time-nba-records-broken/",
+      "source_type": "web"
+    },
+    {
+      "title": "olympics.com",
+      "url": "https://www.olympics.com/en/news/lebron-james-points-tracker-nba-all-time-top-scorer",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "87e000b8-8f6a-4642-9e8f-237427cdb49b",
+  "topic": "LeBron James' age-defying performance and pursuit of all-time scoring record continuation",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 13298,
+    "output_tokens": 1591,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.031253,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-26T05:23:06.856297+00:00"
+}
