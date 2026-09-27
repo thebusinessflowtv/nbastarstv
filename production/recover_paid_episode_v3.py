@@ -133,7 +133,7 @@ def repair_package_nba(package: dict[str, Any], topic: dict[str, Any], research:
 
 
 recovery.repair_package = repair_package_nba
-recovery.finalize_package = v3.core.finalize_package
+recovery.finalize_package = v3.base.core.finalize_package
 
 
 if __name__ == "__main__":
