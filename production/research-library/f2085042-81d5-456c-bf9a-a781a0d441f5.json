@@ -1,0 +1,114 @@
+{
+  "thesis": "LeBron James at age 40 displayed contradictory performance signals in late 2024/early 2025: record-breaking individual milestones contrasted with analysis suggesting diminished efficiency and team performance decline when he played.",
+  "facts": [
+    {
+      "claim": "In December 2024, The Ringer reported Lakers performed better when LeBron rested than when he played, a reversal of his career pattern.",
+      "source_url": "https://www.theringer.com/2024/12/23/nba/lebron-james-age-40-birthday-los-angeles-lakers",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "LeBron set the NBA record for career minutes in December 2024 while averaging 23 points, nine assists, and eight rebounds per game.",
+      "source_url": "https://www.theringer.com/2024/12/23/nba/lebron-james-age-40-birthday-los-angeles-lakers",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "On January 3, 2025, LeBron broke Michael Jordan's record with his 563rd career 30-point game.",
+      "source_url": "https://www.complex.com/sports/a/john-kennedy/lebron-james-2025-lakers-highlights",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "In February 2025 at age 40, LeBron became the oldest player to score 40 points in a game.",
+      "source_url": "https://www.britannica.com/biography/LeBron-James",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "LeBron turned 40 years old on December 30, 2024, after spending over half his life in the NBA.",
+      "source_url": "https://www.nba.com/news/starting-5-dec-30-2024",
+      "safe_for_packaging": true
+    },
+    {
+      "claim": "Erik Spoelstra noted in early December 2024 that LeBron remained mentally sharp and fully engaged in team preparation despite his age.",
+      "source_url": "https://www.nba.com/news/starting-5-dec-30-2024",
+      "safe_for_packaging": true
+    }
+  ],
+  "verified_numbers": [
+    {
+      "value": "40",
+      "context": "LeBron's age on December 30, 2024",
+      "source_url": "https://www.nba.com/news/starting-5-dec-30-2024"
+    },
+    {
+      "value": "23 points, 9 assists, 8 rebounds",
+      "context": "LeBron's per-game averages in late 2024",
+      "source_url": "https://www.theringer.com/2024/12/23/nba/lebron-james-age-40-birthday-los-angeles-lakers"
+    },
+    {
+      "value": "563",
+      "context": "Career 30-point games, breaking Michael Jordan's record on January 3, 2025",
+      "source_url": "https://www.complex.com/sports/a/john-kennedy/lebron-james-2025-lakers-highlights"
+    },
+    {
+      "value": "22",
+      "context": "LeBron's all-star selections through 2025",
+      "source_url": "https://www.complex.com/sports/a/john-kennedy/lebron-james-2025-lakers-highlights"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "December 23, 2024",
+      "event": "The Ringer analysis published questioning if age had caught up to LeBron, noting Lakers performed better in minutes he sat out.",
+      "source_url": "https://www.theringer.com/2024/12/23/nba/lebron-james-age-40-birthday-los-angeles-lakers"
+    },
+    {
+      "date": "December 30, 2024",
+      "event": "LeBron James turned 40 years old; NBA.com celebrated his record career spans and sustained elite status.",
+      "source_url": "https://www.nba.com/news/starting-5-dec-30-2024"
+    },
+    {
+      "date": "January 3, 2025",
+      "event": "LeBron recorded his 563rd career 30-point game against Atlanta Hawks, breaking Michael Jordan's record.",
+      "source_url": "https://www.complex.com/sports/a/john-kennedy/lebron-james-2025-lakers-highlights"
+    },
+    {
+      "date": "February 2025",
+      "event": "LeBron became oldest player to score 40 points in an NBA game at age 40.",
+      "source_url": "https://www.britannica.com/biography/LeBron-James"
+    }
+  ],
+  "sources": [
+    {
+      "title": "theringer.com",
+      "url": "https://www.theringer.com/2024/12/23/nba/lebron-james-age-40-birthday-los-angeles-lakers",
+      "source_type": "web"
+    },
+    {
+      "title": "complex.com",
+      "url": "https://www.complex.com/sports/a/john-kennedy/lebron-james-2025-lakers-highlights",
+      "source_type": "web"
+    },
+    {
+      "title": "britannica.com",
+      "url": "https://www.britannica.com/biography/LeBron-James",
+      "source_type": "web"
+    },
+    {
+      "title": "nba.com",
+      "url": "https://www.nba.com/news/starting-5-dec-30-2024",
+      "source_type": "web"
+    }
+  ],
+  "topic_id": "f2085042-81d5-456c-bf9a-a781a0d441f5",
+  "topic": "LeBron James’ age vs. elite performance debate (December 2024/January 2025)",
+  "research_model": "claude-haiku-4-5-20251001",
+  "anthropic_usage": {
+    "input_tokens": 13335,
+    "output_tokens": 1598,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "web_search_requests": 1
+  },
+  "estimated_cost_usd": 0.031325,
+  "source_index_repaired": true,
+  "researched_at": "2026-09-27T21:36:44.782333+00:00"
+}
